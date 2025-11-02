@@ -1,0 +1,40 @@
+<div class="reservar-container">
+  <h2 class="titulo">🏨 Habitaciones disponibles</h2>
+
+  <div *ngIf="isLoading" class="loading">Cargando habitaciones...</div>
+
+  <div *ngIf="!isLoading && rooms.length === 0" class="mensaje-vacio">
+    {{ customMessage || 'No hay habitaciones registradas' }}
+  </div>
+
+
+  <div class="grid-habitaciones" *ngIf="rooms.length > 0">
+    <div class="room-card" *ngFor="let room of rooms">
+      <div class="room-header">
+        <h3>{{ room.habitacion | titlecase }}</h3>
+        <span class="nivel">{{ room.nivel }}</span>
+      </div>
+
+      <p><strong>ID:</strong> {{ room.id_Rooms }}</p>
+      <p>
+        <strong>Estado:</strong>
+        <span [class]="room.estado === 'libre' ? 'estado-libre' : 'estado-ocupada'">
+          {{ room.estado }}
+        </span>
+      </p>
+      <p><strong>Precio:</strong> Q {{ room.precio }}</p>
+
+      <div class="boton-reservar">
+        <button [disabled]="room.estado !== 'libre'" [routerLink]="['/reservar', room.id_Rooms]">
+          {{ room.estado === 'libre' ? 'Reservar' : 'No disponible' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-buttons">
+    <button (click)="cargarTodas()">Todas las habitaciones</button>
+    <button (click)="filtrarPorNivel('N1')">Nivel 1</button>
+    <button (click)="filtrarPorNivel('N2')">Nivel 2</button>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="huesped-container">
+  <h2>Gestión de Huéspedes</h2>
+
+  <div class="tabs">
+    <button [class.active]="activeTab === 'todos'" (click)="setActive('todos')">Todos</button>
+    <button [class.active]="activeTab === 'manual'" (click)="setActive('manual')">Manual</button>
+    <button [class.active]="activeTab === 'enLinea'" (click)="setActive('enLinea')">En línea</button>
+  </div>
+
+  <div class="huesped-grid">
+    <div *ngFor="let huesped of huespedesFiltrados" class="huesped-card">
+      <h3>{{ huesped.nameHuesped }} {{ huesped.apellidoHuesped }}</h3>
+      <p><strong>Tel:</strong> {{ huesped.telefono }}</p>
+      <p><strong>Habitación:</strong> {{ huesped.habitacionAsignada?.id_Rooms }}</p>
+      <p><strong>Estado:</strong> {{ huesped.statusHuesped }}</p>
+      <p><strong>Registro:</strong> {{ huesped.tipoRegistro | titlecase }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+.reservar-container {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  background-color: #f8f8f8;
+  padding: 1rem;
+  min-height: 100vh;
+}
+
+.titulo {
+  text-align: center;
+  color: #0c2344;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.grid-habitaciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.room-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.room-card:hover {
+  transform: translateY(-5px);
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.nivel {
+  background: #0c2344;
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.estado-libre {
+  color: green;
+  font-weight: bold;
+}
+
+.estado-ocupada {
+  color: red;
+  font-weight: bold;
+}
+
+.loading {
+  text-align: center;
+  font-weight: bold;
+  color: #0c2344;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  color: #777;
+  margin-top: 2rem;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8f8f8;
+}
+
+.filter-buttons button {
+  background-color: #0c2344;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.3rem;
+  font-size: 0.85rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-buttons button:hover {
+  background-color: #d4af37;
+  color: #0a1f3a;
+}
+
+.boton-reservar {
+  text-align: center;
+  margin-top: 0.8rem;
+}
+
+.boton-reservar button {
+  background-color: #0c2344;
+  color: white;
+  border: none;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton-reservar button:hover:enabled {
+  background-color: #d4af37;
+  color: #0a1f3a;
+}
+
+.boton-reservar button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+

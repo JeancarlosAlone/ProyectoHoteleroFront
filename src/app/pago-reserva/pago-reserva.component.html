@@ -1,0 +1,53 @@
+<div class="pago-container">
+  <h2>💳 Pago de Reserva</h2>
+
+  <div class="resumen">
+    <h3>Resumen de la habitación</h3>
+    <p><strong>ID:</strong> {{ habitacion?.id_Rooms }}</p>
+    <p><strong>Tipo:</strong> {{ habitacion?.habitacion | titlecase }}</p>
+    <p><strong>Nivel:</strong> {{ habitacion?.nivel }}</p>
+    <p><strong>Precio:</strong> Q {{ habitacion?.precio }}</p>
+
+    <h3>Servicios adicionales</h3>
+    <div *ngIf="serviciosSeleccionados.length > 0; else sinServicios">
+      <ul>
+        <li *ngFor="let servicio of serviciosSeleccionados">
+          {{ servicio.nombre }} —
+          <span *ngIf="servicio.precioFinal !== undefined">
+            Q {{ servicio.precioFinal }}
+            <small *ngIf="servicio.descuento && servicio.descuento > 0"> ({{ servicio.descuento }}% desc.)</small>
+          </span>
+          <span *ngIf="servicio.precioFinal === undefined">
+            Q {{ servicio.precio }}
+          </span>
+        </li>
+
+      </ul>
+    </div>
+    <ng-template #sinServicios>
+      <p class="texto-secundario">Sin servicios adicionales seleccionados.</p>
+    </ng-template>
+
+    <hr />
+
+    <h3>Datos del cliente</h3>
+    <p><strong>Nombre:</strong> {{ cliente?.nombre }} {{ cliente?.apellido }}</p>
+    <p><strong>Teléfono:</strong> {{ cliente?.telefono }}</p>
+    <p><strong>Número de personas:</strong> {{ cliente?.numPersonas }}</p>
+
+    <hr />
+
+    <h3>Total a pagar: <span class="total">Q {{ total }}</span></h3>
+  </div>
+
+  <div id="paypal-button-container"></div>
+  <p class="mensaje-pago">{{ mensaje }}</p>
+</div>
+
+<!-- Modal de confirmación -->
+<div *ngIf="mostrarModal" class="modal-backdrop">
+  <div class="modal-contenido">
+    <h2>{{ mensajeModal }}</h2>
+    <p>Será redirigido automáticamente...</p>
+  </div>
+</div>

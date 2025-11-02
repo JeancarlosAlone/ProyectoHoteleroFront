@@ -1,0 +1,125 @@
+/* Scope limitado al componente */
+.payment-page, .payment-page * { box-sizing: border-box; }
+
+/* Variables */
+:root{
+  --primary-blue: #0b2f66;
+  --gold: #d8a91e;
+  --panel-dark: #0b0b0c;
+  --control-white: #ffffff;
+  --control-text: #000000;
+  --panel-border: rgba(0,0,0,0.06);
+}
+
+/* layout: dos columnas */
+.payment-page{
+  display: flex;
+  gap: 24px;
+  padding: 28px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* IZQUIERDA: formulario (mantén estilo previo) */
+.form-col{
+  flex: 0 1 55%;
+  min-width: 380px;
+  background: var(--panel-dark);
+  color: var(--control-text);
+  padding: 22px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* DERECHA: info - ocupa el resto y resalta en blanco (para llenar el espacio) */
+.info-col{
+  flex: 1 1 45%;
+  min-width: 300px;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* tarjeta blanca con sombra para que destaque en el fondo blanco del sistema */
+.info-card{
+  width: 100%;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  color: #111;
+}
+
+/* título de la tarjeta */
+.info-title{
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: var(--primary-blue);
+  font-weight:700;
+}
+
+/* filas dentro de la tarjeta */
+.info-row{
+  display:flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* campo de info */
+.info-field{
+  flex: 1;
+  display:flex;
+  flex-direction:column;
+}
+.info-field.full{ flex: 1 1 100%; }
+
+/* etiqueta y valor */
+.f-label{
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 6px;
+  font-weight:700;
+  letter-spacing: 0.6px;
+}
+.f-value{
+  font-size: 16px;
+  font-weight:800;
+  color: #111;
+}
+
+/* placeholder cuando no hay cliente */
+.info-empty{
+  width:100%;
+  background: linear-gradient(180deg,#fafafa,#ffffff);
+  border-radius:8px;
+  padding:20px;
+  text-align:center;
+  color:#666;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+}
+
+/* --- Mantener y ajustar los estilos de formulario (copiados/ajustados) --- */
+.page-title{ font-weight:800; font-size:28px; color:#e6eefb; margin:6px 0 18px 0; }
+
+.row{ display:flex; gap:12px; align-items:center; margin-bottom:12px; }
+.search-input{ flex:1; padding:8px 12px; background:#fff; color:#000; border-radius:8px; border:1px solid rgba(0,0,0,0.08); height:40px; }
+.search-btn{ background:#fff; color:#000; padding:8px 14px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); font-weight:700; height:40px; cursor:pointer; }
+
+.controls-row{ display:flex; gap:20px; align-items:flex-start; width:100%; margin-bottom:18px; }
+.controls-total{ flex:2 1 55%; display:flex; flex-direction:column; gap:6px; }
+.total-label{ font-size:12px; color:#444; font-weight:700; }
+.total-display-inline{ font-size:40px; color:#000; font-weight:900; padding:12px 16px; border-radius:8px; background:#fff; border:1px solid rgba(0,0,0,0.06); min-width:220px; text-align:left; }
+.controls-adjust{ flex:1 1 22%; display:flex; flex-direction:column; gap:6px; }
+.small-label{ color:#666; font-size:12px; font-weight:700; }
+.total-input-inline{ padding:8px 10px; border-radius:6px; background:#fff; color:#000; border:1px solid rgba(0,0,0,0.08); width:130px; height:36px; }
+.controls-nit{ flex:1 1 22%; display:flex; flex-direction:column; gap:6px; }
+.nit-label-inline{ font-size:13px; color:#666; font-weight:700; }
+.nit-input-inline{ padding:10px 12px; border-radius:10px; background:#fff; color:#000; width:100%; box-sizing:border-box; border:1px solid rgba(0,0,0,0.08); height:40px; }
+
+.paypal-container{ margin-top:18px; width:100%; display:block; padding:6px 0; }
+
+/* responsive: en pantallas pequeñas apilar */
+@media (max-width: 920px){
+  .payment-page{ flex-direction:column; }
+  .form-col{ width:100%; }
+  .info-col{ width:100%; margin-top:14px; }
+}

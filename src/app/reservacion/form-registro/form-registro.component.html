@@ -1,0 +1,159 @@
+<form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Nombre Huesped</mat-label>
+    <input matInput formControlName="nameHuesped">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Apellido Huesped</mat-label>
+    <input matInput formControlName="apellidoHuesped">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Telefono Huesped (solo valores numéricos)</mat-label>
+    <input matInput formControlName="telefono" type="tel" pattern="[0-9]*"
+      placeholder="mínimo 8 dígitos" maxlength="16">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Número de Personas</mat-label>
+    <input matInput type="number" formControlName="numPersonas">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Estado</mat-label>
+    <mat-select formControlName="statusHuesped">
+      <mat-option *ngFor="let estado of estadosHuesped" [value]="estado">
+        {{ estado }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Monto</mat-label>
+    <input matInput type="number" formControlName="monto"
+      placeholder="Coloque el monto total a cancelar por la habitación">
+  </mat-form-field>
+
+  <div formGroupName="usuarioRegistrador">
+    <mat-form-field>
+      <mat-label>Id Usuario</mat-label>
+      <input matInput formControlName="id_users" readonly>
+    </mat-form-field>
+  </div>
+
+  <div formGroupName="habitacionAsignada">
+    <mat-form-field>
+      <mat-label>Número de Habitación</mat-label>
+      <input matInput formControlName="id_Rooms" readonly>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field class="full-width">
+    <mat-label>Introduzca un rango de fechas</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate formControlName="fechaRegistro" placeholder="Fecha de inicio">
+      <input matEndDate formControlName="fechaSalida" placeholder="Fecha de finalización">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <!-- SECCIÓN SERVICIOS ADICIONALES -->
+  <section class="addons-section">
+    <div class="section-head">
+      <mat-icon class="icon-gift">card_giftcard</mat-icon>
+      <h3>Servicios adicionales</h3>
+    </div>
+
+    <p class="helper">
+      🏨 Estancia de 3 noches — descuentos aplicados automáticamente según tu estadía.
+    </p>
+
+    <!-- Ítem 1 -->
+    <div class="servicio-card">
+      <img src="assets/img/serv-estacionamiento.jpg" alt="Estacionamiento privado" />
+      <div class="info-servicio">
+        <h4>Estacionamiento privado</h4>
+        <p>Espacio exclusivo con vigilancia 24/7 dentro del hotel.</p>
+        <p class="precio-descuento">
+          <span class="tachado">Q 50</span>
+          <span class="nuevo-precio">Q 45</span>
+          <small class="mensaje-descuento">Descuento aplicado: 10 %</small>
+        </p>
+        <label class="select-row">
+          <mat-checkbox disabled>Seleccionar</mat-checkbox>
+        </label>
+      </div>
+    </div>
+
+    <!-- Ítem 2 -->
+    <div class="servicio-card">
+      <img src="assets/img/serv-desayuno.jpg" alt="Desayuno incluido" />
+      <div class="info-servicio">
+        <h4>Desayuno incluido</h4>
+        <p>Buffet variado con platillos típicos y opciones internacionales.</p>
+        <p class="precio-descuento">
+          <span class="tachado">Q 20</span>
+          <span class="nuevo-precio">Q 16</span>
+          <small class="mensaje-descuento">Descuento aplicado: 20 %</small>
+        </p>
+        <label class="select-row">
+          <mat-checkbox disabled>Seleccionar</mat-checkbox>
+        </label>
+      </div>
+    </div>
+
+    <!-- Ítem 3 -->
+    <div class="servicio-card">
+      <img src="assets/img/serv-spa.jpg" alt="Spa / Masajes" />
+      <div class="info-servicio">
+        <h4>Spa / Masajes</h4>
+        <p>Servicio de relajación y masajes terapéuticos personalizados.</p>
+        <p class="precio-descuento">
+          <span class="tachado">Q 200</span>
+          <span class="nuevo-precio">Q 180</span>
+          <small class="mensaje-descuento">Descuento aplicado: 10 %</small>
+        </p>
+        <label class="select-row">
+          <mat-checkbox disabled>Seleccionar</mat-checkbox>
+        </label>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+  </section>
+
+  <div class="form-buttons">
+    <!-- 🔹 NUEVO BLOQUE DE ACCIONES -->
+<div class="form-buttons actions-room">
+  <button
+    mat-raised-button
+    color="accent"
+    type="button"
+    (click)="abrirMenuServicios()"
+  >
+    Ver servicios adicionales
+  </button>
+
+  <button
+    mat-raised-button
+    color="warn"
+    class="btn-reservar"
+    type="button"
+    (click)="reservarSinPagar()"
+  >
+    Confirmar reserva sin pago
+  </button>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="button"
+    (click)="irAPago()"
+  >
+    Pagar reserva
+  </button>
+</div>
+  </div>
+</form>

@@ -1,0 +1,142 @@
+<div class="payment-page">
+  <!-- COLUMNA IZQUIERDA: formulario y botones -->
+  <div class="form-col">
+    <h2 class="page-title">Pago con PayPal</h2>
+
+    <!-- búsqueda -->
+    <div class="row search-row">
+      <input
+        class="search-input"
+        type="text"
+        [(ngModel)]="clienteIdentifier"
+        placeholder="Buscar cliente por nombre"
+      />
+      <button class="search-btn" (click)="buscarCliente()">Buscar</button>
+    </div>
+
+    <!-- fila controles: total | ajustar | nit -->
+    <div class="row controls-row">
+      <div class="controls-total">
+        <div class="total-label">TOTAL ({{ moneda }})</div>
+        <div class="total-display-inline">
+          {{ total | number:'1.2-2' }}
+        </div>
+      </div>
+
+      <div class="controls-adjust">
+        <label class="small-label">Ajustar monto</label>
+        <input
+          class="total-input-inline"
+          type="number"
+          [(ngModel)]="total"
+          min="0"
+          step="0.01"
+        />
+      </div>
+
+      <div class="controls-nit">
+        <label class="nit-label-inline">NIT / N°FACT</label>
+        <input
+          class="nit-input-inline"
+          type="text"
+          [(ngModel)]="nitFactura"
+          placeholder="NIT o CF"
+        />
+      </div>
+    </div>
+
+    <!-- PayPal buttons -->
+    <div id="paypal-button-container" class="paypal-container"></div>
+
+    <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
+  </div>
+
+  <!-- COLUMNA DERECHA: tarjeta con los datos del cliente (ocupa todo el espacio a la derecha) -->
+  <div class="info-col">
+    <ng-container *ngIf="cliente; else noCliente">
+      <div class="info-card">
+        <h3 class="info-title">Cliente</h3>
+
+        <div class="info-row">
+          <div class="info-field">
+            <span class="f-label">Nombre</span>
+            <span class="f-value">{{ cliente.nameHuesped || cliente.name || '—' }}</span>
+          </div>
+          <div class="info-field">
+            <span class="f-label">Apellido</span>
+            <span class="f-value">{{ cliente.apellidoHuesped || cliente.apellido || '—' }}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-field">
+            <span class="f-label">Teléfono</span>
+            <span class="f-value">{{ cliente.telefono || '—' }}</span>
+          </div>
+          <div class="info-field">
+            <span class="f-label"># Personas</span>
+            <span class="f-value">{{ cliente.numPersonas ?? '—' }}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-field full">
+            <span class="f-label">Habitación</span>
+            <span class="f-value">
+              {{ cliente.habitacionAsignada?.habitacion ? (cliente.habitacionAsignada.habitacion + ' — ' + (cliente.habitacionAsignada?.id_Rooms || '')) : 'Sin habitación asignada' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-field">
+            <span class="f-label">Fecha ingreso</span>
+            <span class="f-value">{{ cliente.fechaRegistro | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="info-field">
+            <span class="f-label">Fecha salida</span>
+            <span class="f-value">{{ cliente.fechaSalida | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-field">
+            <span class="f-label">Noches</span>
+            <span class="f-value">{{ noches }}</span>
+          </div>
+          <div class="info-field">
+            <span class="f-label">Precio por noche ({{ moneda }})</span>
+            <span class="f-value">{{ precioPorNoche | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-field">
+            <span class="f-label">Estado</span>
+            <span class="f-value">{{ cliente.statusHuesped || '—' }}</span>
+          </div>
+          <div class="info-field">
+            <span class="f-label">Monto (por reserva)</span>
+            <span class="f-value">{{ cliente.monto | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-field full">
+            <span class="f-label">Registrado por</span>
+            <span class="f-value">
+              {{ cliente.usuarioRegistrador?.name ? (cliente.usuarioRegistrador.name + ' ' + (cliente.usuarioRegistrador.apellido || '')) : '—' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noCliente>
+      <div class="info-empty">
+        <p>No hay cliente seleccionado.</p>
+        <p>Busca por nombre y el detalle aparecerá aquí.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,154 @@
+<div class="detalle-container" *ngIf="!isLoading; else cargando">
+
+  <!-- BLOQUE 1: Imagen -->
+  <div class="bloque imagen">
+    <img src="assets/img/habitacion-placeholder.jpg" alt="Habitación" />
+  </div>
+
+  <!-- BLOQUE 2: Datos del cliente -->
+  <div class="bloque cliente">
+    <h3>Datos del cliente</h3>
+
+    <div>
+      <label>Nombre: <span class="obligatorio">*</span></label>
+      <input type="text" [(ngModel)]="cliente.nombre" name="nombre" />
+      <div *ngIf="errores.nombre" class="mensaje-error">{{ errores.nombre }}</div>
+    </div>
+
+    <div>
+      <label>Apellido: <span class="obligatorio">*</span></label>
+      <input type="text" [(ngModel)]="cliente.apellido" name="apellido" />
+      <div *ngIf="errores.apellido" class="mensaje-error">{{ errores.apellido }}</div>
+    </div>
+
+    <div>
+      <label>DPI: <span class="obligatorio">*</span></label>
+      <input type="text" [(ngModel)]="cliente.dpi" name="dpi" />
+      <div *ngIf="errores.dpi" class="mensaje-error">{{ errores.dpi }}</div>
+    </div>
+
+    <div>
+      <label>Teléfono: <span class="obligatorio">*</span></label>
+      <input type="tel" [(ngModel)]="cliente.telefono" name="telefono" />
+      <div *ngIf="errores.telefono" class="mensaje-error">{{ errores.telefono }}</div>
+    </div>
+
+    <div>
+      <label>Correo electrónico: <span class="obligatorio">*</span></label>
+      <input type="email" [(ngModel)]="cliente.email" name="email" />
+      <div *ngIf="errores.email" class="mensaje-error">{{ errores.email }}</div>
+    </div>
+
+    <div>
+      <label>Número de personas: <span class="obligatorio">*</span></label>
+      <input type="number" min="1" [(ngModel)]="cliente.numPersonas" name="numPersonas" />
+      <div *ngIf="errores.numPersonas" class="mensaje-error">{{ errores.numPersonas }}</div>
+    </div>
+
+    <div>
+      <label>Fecha de entrada: <span class="obligatorio">*</span></label>
+      <div *ngIf="errores.fechaInicio" class="mensaje-error">{{ errores.fechaInicio }}</div>
+      <input type="date" [(ngModel)]="cliente.fechaInicio" name="fechaInicio" [min]="minFechaEntrada"
+        (change)="actualizarFechaSalida()" />
+    </div>
+
+    <div>
+      <label>Fecha de salida: <span class="obligatorio">*</span></label>
+      <input type="date" [(ngModel)]="cliente.fechaFin" name="fechaFin" [min]="minFechaSalida" />
+      <div *ngIf="errores.fechaFin" class="mensaje-error">{{ errores.fechaFin }}</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3: Datos de la habitación -->
+  <div class="bloque detalle-habitacion">
+    <h3>Datos de la habitación</h3>
+
+    <p><strong>ID:</strong> {{ habitacion?.id_Rooms }}</p>
+    <p><strong>Tipo:</strong> {{ habitacion?.habitacion | titlecase }}</p>
+    <p><strong>Nivel:</strong> {{ habitacion?.nivel }}</p>
+
+    <p>
+      <strong>Estado:</strong>
+      <span [ngClass]="{
+          'estado-libre': habitacion?.estado === 'libre',
+          'estado-ocupada': habitacion?.estado === 'ocupada'
+        }">
+        {{ habitacion?.estado }}
+      </span>
+    </p>
+
+    <p><strong>Precio base:</strong> Q {{ habitacion?.precio }}</p>
+
+    <hr />
+
+    <button class="btn-servicios" (click)="abrirMenuServicios()">Ver servicios adicionales</button>
+
+    <div class="servicios-seleccionados" *ngIf="serviciosSeleccionados.length > 0">
+      <h4>Servicios seleccionados</h4>
+      <ul>
+        <li *ngFor="let s of serviciosSeleccionados">
+          {{ s.nombre }} —
+          <span *ngIf="s.descuento > 0" class="precio-descuento">
+            <span class="tachado">Q {{ s.precio }}</span>
+            <strong> Q {{ s.precioFinal }}</strong>
+            <small> ({{ s.descuento }}% desc.)</small>
+          </span>
+          <span *ngIf="!s.descuento || s.descuento === 0">
+            Q {{ s.precio }}
+          </span>
+        </li>
+      </ul>
+    </div>
+
+<button class="btn-reservar-sin-pago" (click)="reservarSinPagar()">
+  Confirmar reserva sin pago
+</button>
+
+    <button class="btn-pago" (click)="irAPago()">Pagar Reserva</button>
+  </div>
+</div>
+
+<!-- MODAL DE SERVICIOS -->
+<div class="modal-overlay" *ngIf="mostrarMenuServicios">
+  <div class="modal-contenido">
+    <h3>🛎️ Servicios adicionales</h3>
+
+    <p *ngIf="nochesSeleccionadas">
+      🏨 Estancia de {{ nochesSeleccionadas }}
+      noche<span *ngIf="nochesSeleccionadas > 1">s</span> —
+      descuentos aplicados automáticamente según tu estadía.
+    </p>
+
+    <div class="servicio-card" *ngFor="let servicio of listaServicios">
+      <img [src]="servicio.imagen" alt="{{ servicio.nombre }}" />
+      <div class="info-servicio">
+        <h4>{{ servicio.nombre }}</h4>
+        <p>{{ servicio.descripcion }}</p>
+
+        <p *ngIf="servicio?.descuento && servicio.descuento > 0" class="precio-descuento">
+          <span class="tachado">Q {{ servicio.precio }}</span>
+          <span class="nuevo-precio">Q {{ servicio.precioFinal }}</span>
+          <small class="mensaje-descuento">Descuento aplicado: {{ servicio.descuento }} %</small>
+        </p>
+
+        <p *ngIf="!servicio?.descuento || servicio.descuento === 0">
+          <strong>Precio:</strong> Q {{ servicio.precio }}
+        </p>
+
+        <label>
+          <input type="checkbox" [(ngModel)]="servicio.seleccionado" />
+          Seleccionar
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-acciones">
+      <button class="btn-guardar" (click)="guardarServicios()">Guardar selección</button>
+      <button class="btn-cerrar" (click)="cerrarMenuServicios()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #cargando>
+  <div class="loading">Cargando información de la habitación...</div>
+</ng-template>

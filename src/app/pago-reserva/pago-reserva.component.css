@@ -1,0 +1,114 @@
+.pago-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+}
+
+h2 {
+  text-align: center;
+  color: #0c2344;
+  margin-bottom: 1rem;
+}
+
+.resumen {
+  margin-bottom: 1rem;
+}
+
+.resumen h3 {
+  color: #0c2344;
+}
+
+.total {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 1.5rem 0;
+}
+
+.total span {
+  color: #d4af37;
+  font-weight: bold;
+}
+
+.mensaje {
+  text-align: center;
+  margin-top: 1rem;
+  color: #0c2344;
+}
+
+/* Fondo semitransparente detrás del modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Contenedor del modal */
+.modal-contenido {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 30px 40px;
+  text-align: center;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  animation: aparecer 0.3s ease-in-out;
+}
+
+/* Animación sutil */
+@keyframes aparecer {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Texto */
+.modal-contenido h2 {
+  color: #0c2344;
+  margin-bottom: 10px;
+}
+
+.modal-contenido p {
+  color: #333;
+  font-size: 14px;
+}
+
+.huesped-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.huesped-form label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #ffd700;
+}
+
+.huesped-form input {
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: none;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.huesped-form input:focus {
+  outline: 2px solid #d4af37;
+  background-color: #fef9e7;
+}
+
+

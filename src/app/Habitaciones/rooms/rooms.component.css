@@ -1,0 +1,199 @@
+.rooms-container {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  font-size: 25px;
+  padding: 1.5rem;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  background-color: #0c2344;
+  padding: 0.5rem 1rem;
+  position: sticky; 
+  top: 155px; 
+  z-index: 898;
+
+}
+
+.navbar button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.navbar button:hover {
+  background: #d4af37;
+  color: #0a1f3a;
+  border-radius: 8px;
+}
+
+/* CONTENIDO PRINCIPAL */
+.main-content {
+  flex: 1;
+  padding: 0.5rem;
+  padding-bottom:2rem;
+  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+}
+
+/* BARRA DE BÚSQUEDA */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky; 
+  top: 205px; 
+  z-index: 997;
+  background-color: #f8f8f8; 
+  padding: 0.5rem 1rem;
+ 
+}
+
+.search-bar input {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 4px solid rgb(0, 0, 101);
+  border-radius: 8px;
+  width: 20%;
+}
+
+
+/* CONTENEDOR DE HABITACIONES */
+.grid-habitaciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* BOTONES DE FILTRO FIJOS */
+.filter-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.filter-buttons button {
+  background-color: #0c2344;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.3rem;
+  font-size: 0.85rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-buttons button:hover {
+  background-color: #d4af37;
+  color: #0a1f3a;
+}
+
+.mensaje-vacio{
+  justify-content: center;
+}
+
+
+
+@media (max-width: 768px) {
+  .rooms-container {
+    font-size: 18px;
+    padding: 1rem;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar button {
+    width: 100%;
+    text-align: center;
+    margin: 0.2rem 0;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .search-bar input {
+    width: 90%;
+  }
+
+  .grid-habitaciones {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-buttons button {
+    width: 90%;
+  }
+}
+
+@media (max-width: 360px) {
+  /* Oculta la navbar */
+  .navbar {
+    display: none;
+  }
+
+  /* Acomoda la barra de búsqueda */
+  .search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky; 
+  top: 167px; 
+  z-index: 997;
+  background-color: #f8f8f8; 
+  padding: 0.5rem 1rem;
+ 
+}
+.grid-habitaciones{
+  top:200px
+}
+  /* Opcional: ajusta el main-content si es necesario */
+  .main-content {
+    padding-top: 1rem; 
+  }
+   .filter-buttons {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-content: space-between;
+    padding: 1 0.5rem;
+    /* margin-top: 1rem; */
+  }
+
+  .filter-buttons button {
+    flex: 1; 
+    font-size: 0.75rem; 
+    padding: 6px 4px; 
+    white-space: nowrap; 
+  }
+}
+

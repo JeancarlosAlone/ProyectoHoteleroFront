@@ -1,0 +1,72 @@
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+
+<div class="usuarios-container">
+ 
+  <ng-container *ngIf="(users$ | async) as users">
+    <div class="no-users-message" *ngIf="users.length === 0">
+      <h2>No hay usuarios registrados</h2>
+    </div>
+  </ng-container>
+  <div class="tabla-container">
+    <table class="usuarios-table">
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Password</th>
+          <th>Tipo Usuario</th>
+          <th>Fecha Ingreso</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users$ | async; trackBy: trackByUserId">
+          <td>
+            <img
+              [src]="user.imagenBase64+'?t=' + timestamp"
+              alt="Foto de {{ user.name }}"
+              class="user-image"
+            />
+          
+          </td>
+          <td>{{ user.id_users }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.apellido }}</td>
+          <td class="password-cell">{{ user.password }}</td>
+          <td>{{ user.typeUser }}</td>
+          <td>{{ user.fechaIngreso }}</td>
+          <td class="acciones-cell">
+            <div class="btn-group">
+              <button
+                class="btn-editar"
+                (click)="abrirFormularioRegistro(user)">
+                Editar
+              </button>
+              <button class="btn-eliminar" (click)="delete(user.id_users)">
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button
+      mat-raised-button
+      class="btn-registrar"
+      (click)="abrirFormularioRegistro(null)"
+    >
+      + Registrar Usuario
+    </button>
+  </div>
+  @if (isLoading) {
+  <div class="loader-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Guardando usuario y cargando datos...</p>
+  </div>
+  }
+</div>

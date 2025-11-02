@@ -1,0 +1,84 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { Room } from '../../rooms.model';
+import { CommonModule } from '@angular/common';
+import { RoomsService } from '../../rooms.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { RoomsComponent } from '../rooms.component';
+import { RouterLink } from '@angular/router';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon';
+
+@Component({
+  selector: 'app-roomcard',
+  imports: [CommonModule,RouterLink,MatBadgeModule, MatIconModule],
+  templateUrl: './roomcard.component.html',
+  styleUrl: './roomcard.component.css'
+})
+export class RoomcardComponent implements OnInit {
+
+admin: boolean=false;
+@Input() room!: Room;
+
+  constructor(private roomService:RoomsService,
+    private snackBar: MatSnackBar,
+    private roomComponent: RoomsComponent,
+  ) { }
+
+  ngOnInit(): void {
+    this.isAdmin();
+  }
+
+ isAdmin() {
+  const localrol=localStorage.getItem('rol');
+  if(localrol=='admin'){
+  this.admin=true;
+  }
+ }
+ tieneMensaje(): boolean {
+    if (!this.room?.id_Rooms) return false;
+    const clave = `mensajeHabitacion_${this.room.id_Rooms}`;
+    const mensaje = localStorage.getItem(clave);
+    return mensaje !== null && mensaje.trim().length > 0;
+  }
+
+
+  getEstadoUppercase(estado: string): string {
+    return estado.toUpperCase();
+  }
+
+  getClaseEstado(estado: string): string {
+    const estadoLower = estado.toLowerCase();
+    switch (estadoLower) {
+      case 'ocupada': return 'OCUPADA';
+      case 'libre': return 'LIBRE';
+      case 'limpieza': return 'LIMPIEZA';
+      default: return '';
+    }
+  }
+
+  getTipoHabitacion(tipo: string): string {
+    const tipoLower = tipo.toLowerCase();
+    switch (tipoLower) {
+      case 'normal': return 'Habitación_Normal';
+      case 'doble': return 'Habitación_Doble';
+      case 'plus': return 'Habitación_Plus';
+      default: return tipo;
+    }
+  }
+
+  
+
+ editarHabitacion() {
+  this.roomComponent.abrirFormularioRooms(this.room);
+
+} 
+  
+eliminarHabitacion(id: number) {
+  this.roomService.deleteRoom(id).subscribe(() => {
+    this.snackBar.open('Habitacion eliminada con éxito', 'Cerrar', {
+      duration: 3000,
+    });
+  });
+  
+}
+}

@@ -1,0 +1,298 @@
+
+.detalle-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 2rem;
+  background: radial-gradient(circle at center, #e8e8f0 0%, #0c1230 100%);
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  min-height: 90vh;
+}
+
+.bloque {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* --- BLOQUE 1: Imagen --- */
+.imagen img {
+  width: 100%;
+  height: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* --- BLOQUE 2: Datos habitación --- */
+.detalle-habitacion {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.detalle-habitacion h3 {
+  color: #0c2344;
+  margin-bottom: 1rem;
+}
+
+.detalle-habitacion p {
+  margin: 0.3rem 0;
+  color: #222;
+}
+
+.btn-servicios {
+  background: #0c2344;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 0.8rem;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.btn-servicios:hover {
+  background: #d4af37;
+  color: #0c2344;
+}
+
+.servicios-seleccionados {
+  margin-top: 1rem;
+}
+
+.servicios-seleccionados h4 {
+  margin-bottom: 0.4rem;
+  color: #0c2344;
+}
+
+/* --- FORMULARIO CLIENTE: UNA SOLA COLUMNA --- */
+.cliente form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cliente label {
+  font-weight: 500;
+  color: #0c2344;
+}
+
+.cliente input {
+  width: 90%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid #0c2344;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* efecto visual al enfocar */
+.cliente input:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.6);
+}
+
+button {
+  background-color: #0c2344;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #d4af37;
+  color: #0c2344;
+}
+
+
+/* === RESPONSIVE === */
+@media (max-width: 800px) {
+  .cliente form {
+    grid-template-columns: 1fr;
+  }
+
+  .cliente button {
+    grid-column: 1;
+  }
+}
+
+
+
+
+/* --- ESTADOS --- */
+.estado-libre {
+  color: green;
+  font-weight: bold;
+}
+
+.estado-ocupada {
+  color: red;
+  font-weight: bold;
+}
+
+/* --- MODAL --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-contenido {
+  background: white;
+  border-radius: 12px;
+  width: 85%;
+  max-width: 900px;
+  padding: 2rem;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+}
+
+.servicio-card {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 0;
+}
+
+.servicio-card img {
+  width: 130px;
+  height: 90px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.info-servicio {
+  flex: 1;
+}
+
+.modal-acciones {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.btn-guardar {
+  background: #0c2344;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.btn-cerrar {
+  background: #d4af37;
+  color: #0c2344;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* --- Responsive (pantallas pequeñas) --- */
+@media (max-width: 900px) {
+  .detalle-container {
+    grid-template-columns: 1fr;
+  }
+
+  .cliente form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- NUEVO ajuste para el botón de pago --- */
+.btn-pago {
+  margin-top: 1rem;
+  background-color: #0c2344;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.btn-pago:hover {
+  background-color: #d4af37;
+  color: #0c2344;
+}
+
+/* === Estilos de descuentos === */
+.precio-descuento {
+  font-size: 1rem;
+  margin-top: 0.3rem;
+}
+
+.tachado {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 0.4rem;
+}
+
+.nuevo-precio {
+  color: #0c2344;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.mensaje-descuento {
+  display: block;
+  color: #d4af37;
+  font-weight: 500;
+  margin-top: 0.2rem;
+}
+
+
+.obligatorio {
+  color: red;
+  font-weight: bold;
+}
+
+.mensaje-error {
+  color: red;
+  font-size: 13px;
+  margin-top: 2px;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.actions-room {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.btn-reservar {
+  background-color: #d4af37 !important;
+  color: #0c2344 !important;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.8rem;
+  transition: 0.3s;
+}
+
+.btn-reservar:hover {
+  background-color: #b9972a !important;
+  color: white !important;
+}
+
