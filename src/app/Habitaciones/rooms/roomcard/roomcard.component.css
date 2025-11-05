@@ -1,200 +1,200 @@
-/* Estilos base de la tarjeta */
-.tarjeta-habitacion {
+.room-card {
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  max-width: 300px;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   cursor: pointer;
 }
 
-.tarjeta-habitacion:hover {
-  transform: translateY(-15px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+.room-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
 }
 
-.tarjeta-habitacion.Habitación_Normal {
-  border: 6px solid #003064;
-}
-.tarjeta-habitacion.Habitación_Doble {
-  border: 4px solid #0a2a3a;
-}
-
-.tarjeta-habitacion.Habitación_Plus {
-  border: 4px solid #000000;
-}
-
-/* Estados de la habitación */
-.tarjeta-habitacion.LIBRE {
-  box-shadow: 0 0 12px 4px #189b1c;
-}
-
-.tarjeta-habitacion.OCUPADA {
-  box-shadow: 0 0 12px 4px #f44336;
-}
-
-.tarjeta-habitacion.LIMPIEZA {
-  box-shadow: 0 0 12px 4px #ffc107;
-}
-
-/* Contenedor de imagen */
-.contenedor-imagen {
+/* Imagen */
+.image-container {
   position: relative;
-  height: 190px;
+  height: 170px;
   overflow: hidden;
 }
 
-.imagen-habitacion {
-  font-family: "Bodoni MT Black", "Playfair Display", serif;
-  font-size: 120px;
+.room-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  color: #deaa1a;
-}
-.imagen-habitacion.Habitación_Normal {
-
-   color:#d29a00;
-  border-bottom: #003064 6px solid;
-  box-sizing: border-box; 
-  
+  transition: transform 0.4s ease;
 }
 
-.imagen-habitacion.Habitación_Doble {
-  background-color: #0a2a3a;
+.image-container:hover .room-image {
+  transform: scale(1.04);
 }
 
-.imagen-habitacion.Habitación_Plus {
-  background-color:  #000000;
-}
-
-/* Badge de estado */
-.badge-estado {
-
-  top: 12px;
-  left: 12px;
+/* Estado (Libre, Ocupada, Limpieza) */
+.estado {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.35rem 0.75rem;
-  border-radius: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 2;
-}
-
-.badge-estado.LIBRE {
-  background-color: #4caf50;
   color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.badge-estado.OCUPADA {
-  background-color: #f44336;
-  color: white;
+.estado-libre {
+  background-color: #27ae60;
 }
 
-.badge-estado.LIMPIEZA {
-  background-color: #ffc107;
-  color: rgba(0, 0, 0, 0.8);
+.estado-ocupada {
+  background-color: #c0392b;
 }
 
-/* Detalles de la habitación */
-.detalles-habitacion {
+.estado-limpieza {
+  background-color: #f39c12;
+}
+
+/* Información */
+.info {
   padding: 1rem;
+  text-align: center;
+  background: #fff;
 }
 
-.encabezado-habitacion {
+.room-number {
+  color: #d4af37;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0.3rem 0;
+}
+
+.room-type {
+  font-weight: 600;
+  color: #0c2344;
+  font-size: 1rem;
+}
+
+.nivel {
+  background: #0c2344;
+  color: white;
+  border-radius: 12px;
+  padding: 0 7px;
+  font-size: 0.75rem;
+  margin-left: 5px;
+}
+
+.price {
+  margin-top: 0.5rem;
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Barra inferior para admin */
+.admin-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  background: linear-gradient(90deg, #0c2344 0%, #122e5c 100%);
+  padding: 0.5rem;
+  border-top: 2px solid #d4af37;
 }
 
-.tipo-habitacion {
-  font-size: 1.3rem;
-  
-  color: #0a2a3a;
-  margin: 0;
-}
-
-.nivel-habitacion {
-  font-size:1rem;
-  color: goldenrod;
-  background-color: #002a5b;
-  padding: 0.3rem 0.4rem;
-  border-radius: 50%;
- 
-}
-
-.info-habitacion p {
-  margin: 0.5rem 0;
-}
-
-.info-habitacion strong {
-  color: #0a2a3a;
-}
-
-
-.acciones-habitacion {
-
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  gap: 8px;
-  opacity: 0;
-  z-index: 3;
-}
-
-.tarjeta-habitacion:hover .acciones-habitacion {
-  opacity: 1;
-}
-
-.btn-icono {
-  background: white;
+.admin-bar button {
+  flex: 1;
+  margin: 0 4px;
+  padding: 0.45rem 0;
   border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
- 
+  gap: 6px;
 }
 
-.btn-icono:hover {
-  background: #f0f0f0;
+.edit-btn {
+  background-color: #1e3a8a;
 }
 
-
-
-.btn-icono.editar i {
-  color: #2196f3;
+.edit-btn:hover {
+  background-color: #2f4fae;
 }
 
-.btn-icono.eliminar i {
-  color: #e53935;
+.delete-btn {
+  background-color: #d62828;
 }
 
-.contenedor-estado-y-icono {
-  position: absolute;
-  top: 12px;
-  left: 12px;
+.delete-btn:hover {
+  background-color: #b51f1f;
+}
+
+/* Íconos */
+.admin-bar i {
+  font-size: 0.9rem;
+}
+
+/* Barra inferior de administración */
+.admin-bar {
   display: flex;
-  flex-direction: row;  
+  justify-content: space-between;
   align-items: center;
-  gap: 8px; 
-  z-index: 3;
+  background: linear-gradient(90deg, #0c2344, #132c5b);
+  padding: 0.6rem 0.7rem;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  gap: 0.5rem;
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.1);
 }
 
-.icono-mensaje {
-  width: 100%;
-  font-size: 24px;
-  color: #f44336;
+/* Botones refinados */
+.admin-bar button {
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.25s ease;
+  color: #fff;
+}
+
+/* Botón editar */
+.admin-bar .edit-btn {
+  background: #0c2344; /* Azul oscuro institucional */
+}
+
+.admin-bar .edit-btn:hover {
+  background: #d4af37;
+  color: #0c2344;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Botón eliminar */
+.admin-bar .delete-btn {
+  background: #b52b27; /* Rojo vino elegante */
+}
+
+.admin-bar .delete-btn:hover {
+  background: #ff4d4d;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Íconos dentro de los botones */
+.admin-bar i {
+  margin-right: 6px;
+  font-size: 0.9rem;
+  vertical-align: middle;
 }

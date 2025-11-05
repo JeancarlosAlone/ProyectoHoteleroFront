@@ -1,20 +1,19 @@
 <div class="rooms-container">
   <!-- Navbar -->
   <div class="navbar">
-  <button routerLink="/GuardarReporte">Imprimir Reporte</button>
-  <button routerLink="/SACH/huesped">Gestion de Huespedes</button>
-  <button routerLink="/SACH/pago">Pago con PayPal</button>
-  @if (admin) {
-    <button (click)="abrirFormularioRooms(null)">Nueva Habitacion</button>
-    <button routerLink="/SACH/users">Control de Usuarios</button>
-  }
-</div>
+    <button routerLink="/GuardarReporte">Imprimir Reporte</button>
+    <button routerLink="/SACH/huesped">Gestión de Huéspedes</button>
+    <button routerLink="/SACH/pago">Pago con PayPal</button>
+    @if (admin) {
+      <button (click)="abrirFormularioRooms(null)">Nueva Habitación</button>
+      <button routerLink="/SACH/users">Control de Usuarios</button>
+    }
+  </div>
 
   <!-- Contenido principal -->
   <div class="main-content">
-    <!-- Barra de búsqueda por ID -->
+    <!-- Barra de búsqueda -->
     <div class="search-bar">
-
       <input
         type="number"
         maxlength="3"
@@ -22,7 +21,6 @@
         [(ngModel)]="idBusqueda"
         (input)="buscarHabitacionPorId()"
       />
-     
     </div>
 
     <!-- Contenedor de habitaciones -->
@@ -32,14 +30,18 @@
         *ngIf="(rooms?.length ?? 0) > 0; else sinHabitaciones"
       >
         @for (room of rooms; track room.id_Rooms) {
-        <app-roomcard [room]="room" />
+          <app-roomcard
+            [room]="room"
+            [admin]="admin"
+            (editarHabitacion)="abrirFormularioRooms($event)"
+            (eliminarHabitacion)="eliminarHabitacion($event)"
+          />
         }
       </div>
 
       <ng-template #sinHabitaciones>
         <p class="mensaje-vacio">{{ customMessage }}</p>
       </ng-template>
-     
     </div>
 
     <!-- Botones de filtrado -->

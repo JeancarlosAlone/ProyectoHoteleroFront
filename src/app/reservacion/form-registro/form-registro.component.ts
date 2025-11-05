@@ -16,13 +16,14 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { Router } from '@angular/router';
 import { HuespedService } from '../../Huesped/huesped.service';
 import { HuespedResponse } from '../../Huesped/huesped.model';
 import { RoomsService } from '../../Habitaciones/rooms.service';
 import { TypesRoomsStatus } from '../../Habitaciones/rooms.model';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable, take } from 'rxjs';
+
 
 
 
@@ -50,18 +51,23 @@ import { map, Observable, take } from 'rxjs';
 export class FormRegistroComponent implements OnInit {
   formulario!: FormGroup;
   idRoomFromRoute!: number;
+
+  esVistaUsuario: boolean = false;
+
   readonly idUsuarioRegistrador = output<string>();
-  readonly estadosHuesped = ['pendiente de pago', 'cancelado'];
+  readonly estadosHuesped = ['Pendiente de pago', 'Cancelado'];
 
   constructor(
     private fb: FormBuilder,
     private huespedService: HuespedService,
     private habitacionService: RoomsService,
     private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.idRoomFromRoute = Number(this.route.snapshot.paramMap.get('id'));
+    this.esVistaUsuario = window.location.pathname.includes('/SACH');
     this.initForm();
     this.setUserIdFromLocalStorage();
 
@@ -94,13 +100,18 @@ export class FormRegistroComponent implements OnInit {
     });
   }
 
-  private setUserIdFromLocalStorage() {
-    const idUser = localStorage.getItem('idUser');
-    if (idUser) {
-      this.formulario.get('usuarioRegistrador.id_users')?.setValue(idUser);
-      this.formulario.get('habitacionAsignada.id_Rooms')?.setValue(this.idRoomFromRoute)
-    }
+ private setUserIdFromLocalStorage() {
+  const idUser = localStorage.getItem('idUser');
+
+  if (idUser) {
+    this.formulario.get('usuarioRegistrador.id_users')?.setValue(idUser);
+  } else {
+    this.formulario.get('usuarioRegistrador.id_users')?.reset();
   }
+
+  this.formulario.get('habitacionAsignada.id_Rooms')?.setValue(this.idRoomFromRoute);
+}
+
 
   private autollenarSiHuespedActivo() {
     const hoy = new Date();
@@ -190,44 +201,49 @@ export class FormRegistroComponent implements OnInit {
       this.formulario.markAllAsTouched();
     }
   }
+   
   reservarSinPagar() {
-    if (this.formulario.valid) {
-      const huespedRequest = this.formulario.value;
-      huespedRequest.statusHuesped = 'pendiente de pago'; // estado pendiente
-      huespedRequest.habitacionAsignada = { id_Rooms: this.idRoomFromRoute };
+  if (this.formulario.valid) {
+    const huespedRequest = this.formulario.value;
+    huespedRequest.statusHuesped = 'pendiente de pago';
+    huespedRequest.habitacionAsignada = { id_Rooms: this.idRoomFromRoute };
 
-      // Guardamos el huésped en BD
-      this.huespedService.createHuesped(huespedRequest).subscribe({
-        next: () => {
-          confirm('Reserva registrada como pendiente de pago.');
+    this.huespedService.createHuesped(huespedRequest).subscribe({
+      next: () => {
+        alert('Reserva registrada correctamente.');
 
-          // Cambiamos estado de habitación a "ocupada"
-          this.habitacionService.changeStatus(
-            this.idRoomFromRoute,
-            'ocupada'
-          ).subscribe({
-            next: () => console.log('Habitación marcada como ocupada'),
-            error: () => confirm('Error al actualizar habitación.')
-          });
+        this.habitacionService.changeStatus(
+          this.idRoomFromRoute,
+          TypesRoomsStatus.ocupada
+        ).subscribe({
+          next: () => console.log('Habitación marcada como ocupada'),
+          error: () => alert('Error al actualizar habitación.')
+        });
 
-          this.formulario.reset();
-        },
-        error: (err) => console.error('Error al registrar huésped:', err)
-      });
-    } else {
-      confirm('Completa todos los campos requeridos antes de continuar.');
-      this.formulario.markAllAsTouched();
-    }
+        this.router.navigate(['/SACH/habitaciones']);
+        this.formulario.reset();
+      },
+      error: (err) => console.error('Error al registrar huésped:', err)
+    });
+  } else {
+    alert('Completa todos los campos requeridos antes de continuar.');
+    this.formulario.markAllAsTouched();
   }
+}
+
+
 
   abrirMenuServicios() {
     confirm('Aquí se mostrarán los servicios adicionales.');
   }
 
   irAPago() {
-    confirm('Aquí se iniciará el flujo de pago con PayPal.');
-  }
+  // Detectar si el usuario está en la vista del panel o en la vista cliente
+  const origen = window.location.pathname.includes('/SACH') ? 'usuario' : 'cliente';
 
+  // Redirigir al componente de pago con el parámetro "origen"
+  this.router.navigate(['/pago-reserva'], { queryParams: { origen } });
+}
 
   nuevaReservacion() {
     this.huespedService.clearHuespedAEditar(); // Por si venía de una edición

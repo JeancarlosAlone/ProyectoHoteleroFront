@@ -1,65 +1,41 @@
-<div
-  class="tarjeta-habitacion"
-  [ngClass]="[getClaseEstado(room.estado), getTipoHabitacion(room.habitacion)]"
->
-  @if (admin) {
-  <div class="acciones-habitacion">
-    <button class="btn-icono editar" (click)="editarHabitacion()">
-      <i class="material-icons">edit</i>
+<div class="room-card">
+  <!-- Imagen -->
+  <div class="image-container" (click)="verHabitacion(room.id_Rooms)">
+    <img
+      [src]="
+        room.image_url && room.image_url.trim() !== ''
+          ? room.image_url
+          : 'https://res.cloudinary.com/dy7wfku3s/image/upload/v1762236405/WhatsApp_Image_2025-11-03_at_6.04.22_PM_ok0q7n.jpg'
+      "
+      alt="Imagen de habitación"
+      class="room-image"
+      onerror="this.src='https://res.cloudinary.com/dy7wfku3s/image/upload/v1762236405/WhatsApp_Image_2025-11-03_at_6.04.22_PM_ok0q7n.jpg'"
+    />
+
+    <span class="estado" [ngClass]="getEstadoClass(room.estado)">
+      {{ room.estado | uppercase }}
+    </span>
+  </div>
+
+  <!-- Información -->
+  <div class="info" (click)="verHabitacion(room.id_Rooms)">
+    <h2 class="room-number">{{ room.id_Rooms }}</h2>
+    <h3 class="room-type">
+      {{ getTipoHabitacion(room.habitacion) }}
+      <span class="nivel">{{ room.nivel }}</span>
+    </h3>
+    <p class="price">
+      Precio: <strong>Q{{ room.precio.toFixed(2) }}</strong>
+    </p>
+  </div>
+
+  <!-- Nueva barra elegante inferior -->
+  <div class="admin-bar" *ngIf="admin">
+    <button class="edit-btn" (click)="editarRoom(room)">
+      <i class="fa-solid fa-pen-to-square"></i> Editar
     </button>
-    <button
-      class="btn-icono eliminar"
-      (click)="eliminarHabitacion(room.id_Rooms)"
-    >
-      <i class="material-icons">delete</i>
+    <button class="delete-btn" (click)="eliminarRoom(room.id_Rooms)">
+      <i class="fa-solid fa-trash"></i> Eliminar
     </button>
   </div>
-  }
-
-  <a
-    [routerLink]="['/SACH/RegistroHuesped', room.id_Rooms]"
-    style="text-decoration: none; color: inherit"
-  >
-    <div class="contenedor-imagen">
-      <span
-        class="imagen-habitacion"
-        [ngClass]="getTipoHabitacion(room.habitacion)"
-        >{{ room.id_Rooms }}</span
-      >
-
-      <div class="contenedor-estado-y-icono">
-        <span class="badge-estado" [ngClass]="getClaseEstado(room.estado)">
-          {{ getEstadoUppercase(room.estado) }}
-        </span>
-
-        <mat-icon
-          style="background-color: white; border-radius: 20%"
-          *ngIf="tieneMensaje()"
-          matBadge="!"
-          matBadgeColor="warn"
-          matBadgePosition="above after"
-          class="icono-mensaje"
-          aria-label="Mensaje disponible"
-        >
-          message
-        </mat-icon>
-      </div>
-    </div>
-
-    <div class="detalles-habitacion">
-      <div class="encabezado-habitacion">
-        <h3 class="tipo-habitacion">
-          {{ getTipoHabitacion(room.habitacion) }}
-        </h3>
-        <span class="nivel-habitacion">{{ room.nivel }}</span>
-      </div>
-
-      <div class="info-habitacion">
-        <p>
-          <strong>Precio:</strong>
-          {{ room.precio | currency : "Q" : "symbol" : "1.2-2" }}
-        </p>
-      </div>
-    </div>
-  </a>
 </div>

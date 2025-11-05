@@ -19,11 +19,17 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  if (requiredRole && storedRole !== requiredRole) {
+ if (requiredRole) {
+  const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+  if (!allowedRoles.includes(storedRole)) {
     alert('Acceso denegado: Rol no autorizado');
-    router.navigate([`/${storedId}/habitaciones`]); 
+    router.navigate(['/SACH/habitaciones']);
     return false;
   }
+}
+
+
+
 
   return true;
 }

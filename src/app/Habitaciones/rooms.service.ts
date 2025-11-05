@@ -34,19 +34,30 @@ export class RoomsService {
     return this._http.get<Room>(`${this.baseUrl}/${id}`);
   }
 
-  //  Crear habitación
-  createRoom(room: Room): Observable<Room> {
-    return this._http.post<Room>(this.baseUrl, room).pipe(
-      tap(() => this.loadRooms())
-    );
-  }
+ // Crear habitación
+createRoom(room: Room): Observable<Room> {
+  return this._http.post<Room>(this.baseUrl, room).pipe(
+    tap((newRoom) => {
+      const updatedRooms = [...this.roomsSubject.value, newRoom];
+      this.roomsSubject.next(updatedRooms);
+      this.loadRooms(); // 👈 fuerza recarga desde backend
+    })
+  );
+}
 
-  //  Actualizar habitación
-  updateRoom(id_rooms: number, room: Room): Observable<Room> {
-    return this._http.put<Room>(`${this.baseUrl}/${id_rooms}`, room).pipe(
-      tap(() => this.loadRooms())
-    );
-  }
+// Actualizar habitación
+updateRoom(id_rooms: number, room: Room): Observable<Room> {
+  return this._http.put<Room>(`${this.baseUrl}/${id_rooms}`, room).pipe(
+    tap((updatedRoom) => {
+      const updatedRooms = this.roomsSubject.value.map(r =>
+        r.id_Rooms === id_rooms ? updatedRoom : r
+      );
+      this.roomsSubject.next(updatedRooms);
+      this.loadRooms(); // 👈 recarga para mantener imagen_url actualizada
+    })
+  );
+}
+
 
   //  Eliminar habitación
   deleteRoom(id: number): Observable<Room> {

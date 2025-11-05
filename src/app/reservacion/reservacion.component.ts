@@ -8,6 +8,7 @@ import { ReservaService } from '../services/reserva.service';
 import { HuespedService } from '../Huesped/huesped.service';
 import { HuespedRequest } from '../Huesped/huesped.model';
 
+
 @Component({
   selector: 'app-reservacion',
   standalone: true,
@@ -18,6 +19,17 @@ import { HuespedRequest } from '../Huesped/huesped.model';
 export class ReservacionComponent implements OnInit {
   habitacion: Room | null = null;
   isLoading = true;
+  mostrarModal = false;
+  mensajeModal = '';
+
+  mostrarModalConMensaje(mensaje: string) {
+    this.mensajeModal = mensaje;
+    this.mostrarModal = true;
+
+    setTimeout(() => {
+      this.mostrarModal = false;
+    }, 2500);
+  }
 
   // Datos del cliente
   cliente = {
@@ -94,6 +106,8 @@ export class ReservacionComponent implements OnInit {
     private reservaService: ReservaService,
     private huespedService: HuespedService
   ) { }
+
+
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -245,71 +259,65 @@ export class ReservacionComponent implements OnInit {
   reservarSinPagar(): void {
     if (!this.validarDatosCliente()) return;
     if (!this.habitacion) {
-      alert('Primero selecciona una habitación válida.');
+      this.mostrarModalConMensaje('Primero selecciona una habitación válida.');
       return;
     }
 
     const idUser = localStorage.getItem('idUser');
-
     if (!idUser) {
-      alert('No se encontró el usuario en sesión. Inicia sesión nuevamente.');
-      this.router.navigate(['/login']);
+      this.mostrarModalConMensaje('No se encontró el usuario en sesión.');
+      setTimeout(() => this.router.navigate(['/login']), 2500);
       return;
     }
 
-
-    // Monto total
+    //  Recolectamos los servicios seleccionados
     const serviciosSeleccionados = this.listaServicios.filter(s => s.seleccionado);
     const totalServicios = serviciosSeleccionados.reduce((acc, s) => acc + (Number(s.precioFinal) || 0), 0);
     const precioHabitacion = Number(this.habitacion?.precio) || 0;
     const montoTotal = precioHabitacion + totalServicios;
-    const montoSeguro = Math.max(1, montoTotal); // evita 0
 
-    // Payload
+    // 🔹 Armamos el payload completo
     const huespedRequest: HuespedRequest = {
       nameHuesped: this.cliente.nombre,
       apellidoHuesped: this.cliente.apellido,
       telefono: this.cliente.telefono,
       numPersonas: this.cliente.numPersonas,
-      monto: montoSeguro as unknown as any,
+      monto: montoTotal,
       statusHuesped: 'pendiente de pago',
       fechaRegistro: this.cliente.fechaInicio,
       fechaSalida: this.cliente.fechaFin,
       usuarioRegistrador: { id_users: String(idUser) },
-      habitacionAsignada: { id_Rooms: this.habitacion!.id_Rooms }
-
+      habitacionAsignada: { id_Rooms: this.habitacion!.id_Rooms },
+      serviciosSeleccionados
     };
 
     console.log('Enviando huésped al backend:', huespedRequest);
 
     this.huespedService.createHuesped(huespedRequest).subscribe({
       next: () => {
-        console.log('Huésped registrado correctamente.');
-
-        this.roomsService.changeStatus(
-          this.habitacion!.id_Rooms,
-          TypesRoomsStatus.ocupada
-        ).subscribe({
-          next: () => {
-            console.log('Habitación marcada como ocupada correctamente.');
-            alert('Reserva registrada como pendiente de pago.');
-            this.router.navigate(['/SACH/habitaciones']);
-          },
-          error: (err) => {
-            console.error('Error al cambiar el estado de la habitación:', err);
-            alert('Se registró el huésped, pero no se pudo actualizar el estado de la habitación.');
-          }
-        });
+        this.mostrarModalConMensaje('Reserva registrada con éxito.');
+        setTimeout(() => this.router.navigate(['/SACH/habitaciones']), 2500);
       },
       error: (err) => {
         console.error('Error al registrar huésped:', err);
-        console.error('Detalles del error:', err?.error || err?.message);
-        alert('Error al registrar el huésped. Revisa la consola para más detalles.');
+        this.mostrarModalConMensaje('Error al registrar el huésped.');
       }
     });
-
-    // Feedback inmediato en UI
-    this.habitacion.estado = TypesRoomsStatus.ocupada;
-    console.log('Reserva marcada como pendiente de pago en UI.');
   }
+  // 🧹 Limpiar formulario
+  limpiarCampos() {
+    this.cliente = {
+      nombre: '',
+      apellido: '',
+      dpi: '',
+      telefono: '',
+      email: '',
+      numPersonas: 1,
+      fechaInicio: this.minFechaEntrada,
+      fechaFin: ''
+    };
+    this.errores = {};
+  }
+
+
 }

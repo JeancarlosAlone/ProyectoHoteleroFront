@@ -23,5 +23,6 @@ export enum TypesRooms {
     nivel: TypesRoomsLevel;
     estado: TypesRoomsStatus;
     precio: number;
-  }
+    image_url?: string;  
+}
 

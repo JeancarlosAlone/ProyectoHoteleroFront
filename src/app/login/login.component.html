@@ -1,61 +1,108 @@
-<!-- login.component.html -->
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 />
+
 <div class="login-wrapper">
-  <div class="container">
-    <!-- Sección izquierda -->
-    <div class="info">
-      <p class="txt-1">¡BIENVENIDO!</p>
-      <h2>SACH</h2>
-      <hr />
-      <p class="txt-2">SISTEMA DE ADMINISTRACIÓN Y CONTROL DE HABITACIONES</p>
-      <img src="Losmolinos.png" alt="Logo Hotel Los Molinos" />
+  <div class="login-container">
+    <!-- Panel izquierdo -->
+    <div class="info-section">
+      <h1 class="welcome">¡BIENVENIDO!</h1>
+      <h2 class="brand">SACH</h2>
+      <hr class="divider" />
+      <p class="subtitle">
+        SISTEMA DE ADMINISTRACIÓN Y CONTROL DE HABITACIONES
+      </p>
+      <img src="Losmolinos.png" alt="Logo Hotel Los Molinos" class="logo" />
     </div>
 
-    <!-- Sección derecha: Formulario -->
-    <form class="form" (ngSubmit)="onSubmit()">
+    <!-- Panel derecho -->
+    <form class="form-section" (ngSubmit)="onSubmit()">
       <h2>INICIAR SESIÓN</h2>
-      <p>
-        "Hagas lo que hagas, hazlo bien, tan bien que, cuando la gente te vea
+      <p class="quote">
+        "Hagas lo que hagas, hazlo bien, tan bien que, cuando la gente te vea,
         quiera traer a otros para mostrarles."
       </p>
-      <div class="inputs">
+
+      <div class="input-group">
         <input
           type="text"
-          class="box"
-          placeholder="Ingrese Nombre de Usuario "
+          placeholder="Ingrese nombre de usuario"
           [(ngModel)]="username"
           name="username"
           required
         />
-       
-
-        <div class="password-container">
-          <input
-            [type]="showPassword ? 'text' : 'password'"
-            class="box"
-            id="password"
-            placeholder="Ingrese Contraseña"
-            [(ngModel)]="password"
-            name="password"
-            required
-          />
-          <i
-            class="fa eye-icon"
-            [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
-            (click)="togglePassword()"
-          ></i>
-        </div>
-        
-
-        <input type="submit" value="Ingresar" class="submit" />
       </div>
+
+      <div class="input-group password-field">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Ingrese contraseña"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+        <i
+          class="fa eye-icon"
+          [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
+          (click)="togglePassword()"
+        ></i>
+      </div>
+
+      <button type="submit" class="btn-submit">INGRESAR</button>
+
+      <div class="register-text">
+        <span>¿Nuevo en la plataforma?</span>
+        <a (click)="openRegisterModal()">Registrarse</a>
+      </div>
+
       <div *ngIf="loginErrorMessage" class="error-message">
-  <i class="fa fa-exclamation-circle"></i>
-  {{ loginErrorMessage }}
-</div>
+        <i class="fa fa-exclamation-circle"></i>
+        {{ loginErrorMessage }}
+      </div>
     </form>
+  </div>
+
+  <!-- Modal registro -->
+  <div class="modal-backdrop" *ngIf="showRegisterModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Registrar nuevo usuario</h3>
+        <button class="close-btn" (click)="closeRegisterModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <input
+          type="text"
+          placeholder="Nombre"
+          [(ngModel)]="registerData.name"
+          name="name"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Apellido"
+          [(ngModel)]="registerData.apellido"
+          name="apellido"
+          required
+        />
+        <input
+          type="email"
+          placeholder="Correo"
+          [(ngModel)]="registerData.correo"
+          name="correo"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          [(ngModel)]="registerData.password"
+          name="password"
+          required
+        />
+
+        <button class="btn-modal" (click)="onRegister()">Guardar</button>
+      </div>
+    </div>
   </div>
 </div>

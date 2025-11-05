@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { RoomsService } from '../Habitaciones/rooms.service';
 import { Room } from '../Habitaciones/rooms.model';
-
 
 @Component({
   selector: 'app-reservar-habitacion',
@@ -15,8 +14,10 @@ import { Room } from '../Habitaciones/rooms.model';
 export class ReservarHabitacionComponent implements OnInit {
 
   rooms: Room[] = [];
-  isLoading: boolean = false;
-  customMessage: string = '';
+  isLoading = false;
+  customMessage = '';
+
+  private router = inject(Router); 
 
   constructor(private roomsService: RoomsService) {}
 
@@ -24,8 +25,7 @@ export class ReservarHabitacionComponent implements OnInit {
     this.cargarTodas();
   }
 
-  // ✅ Cargar todas las habitaciones
-  cargarTodas() {
+  cargarTodas(): void {
     this.isLoading = true;
     this.roomsService.getAllRooms().subscribe({
       next: (data) => {
@@ -39,8 +39,7 @@ export class ReservarHabitacionComponent implements OnInit {
     });
   }
 
-  // ✅ Filtrar por nivel
-  filtrarPorNivel(nivel: string) {
+  filtrarPorNivel(nivel: string): void {
     this.isLoading = true;
     this.roomsService.getAllRooms().subscribe({
       next: (data) => {
@@ -52,5 +51,11 @@ export class ReservarHabitacionComponent implements OnInit {
         console.error('Error al filtrar habitaciones:', err);
       }
     });
+  }
+
+  cerrarSesion(): void {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']); 
   }
 }

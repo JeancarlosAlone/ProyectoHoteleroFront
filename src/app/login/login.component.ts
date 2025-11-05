@@ -3,10 +3,11 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UsersService } from '../Users/Users.service';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -14,41 +15,90 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
   showPassword: boolean = false;
-  loginErrorMessage:string='';
-  constructor(private userService: UsersService, private router: Router) {}
+  loginErrorMessage: string = '';
+
+  showRegisterModal: boolean = false;
+  registerData = {
+    name: '',
+    apellido: '',
+    correo: '',
+    password: ''
+  };
+
+  constructor(private userService: UsersService, private router: Router, private http: HttpClient) {}
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
 
   onSubmit(): void {
-  this.loginErrorMessage='';
+    this.loginErrorMessage = '';
 
- if (!this.username || !this.password) {
-      this.loginErrorMessage = 'Por favor,revise o complete ambos campos.';
+    if (!this.username || !this.password) {
+      this.loginErrorMessage = 'Por favor, revise o complete ambos campos.';
       return;
     }
 
+    // ===== 1. Intentar login como usuario/admin =====
+    this.userService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        const id = response.idUser;
+        if (id) localStorage.setItem('idUser', id.toString());
+        if (response.token) localStorage.setItem('token', response.token);
+        if (response.rol) localStorage.setItem('rol', response.rol);
 
+        this.router.navigate(['/SACH/habitaciones']);
+      },
+      error: (err) => {
+        this.tryClientLogin();
+      },
+    });
+  }
 
-     this.userService.login(this.username, this.password).subscribe({
-    next: (response) => {
-     const id = response.idUser;
-      this.router.navigate(['/SACH/habitaciones']);
-    },
-     error: (err) => {
-
-       if (err.status === 0) {
-          // No hay conexión con el servidor
-          this.loginErrorMessage = 'No se logro establecer conexión con el servidor.  ';
+  private tryClientLogin(): void {
+    this.http.post('http://localhost:8080/api/clientes/login', {
+      correo: this.username,
+      password: this.password
+    }).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('cliente', JSON.stringify(res.cliente));
+        this.router.navigate(['/reservar']);
+      },
+      error: (err) => {
+        if (err.status === 0) {
+          this.loginErrorMessage = 'No se logró establecer conexión con el servidor.';
         } else {
-          // Error de autenticación u otro
           this.loginErrorMessage = 'Credenciales incorrectas o usuario no encontrado. Valide que su nombre y contraseña sean correctos.';
         }
-        console.error(err);
       }
-   
-  });
+    });
+  }
 
+  openRegisterModal() {
+    this.showRegisterModal = true;
+    this.loginErrorMessage = '';
+  }
+
+  closeRegisterModal() {
+    this.showRegisterModal = false;
+    this.registerData = { name: '', apellido: '', correo: '', password: '' };
+  }
+
+  onRegister() {
+    if (!this.registerData.name || !this.registerData.apellido || !this.registerData.correo || !this.registerData.password) {
+      this.loginErrorMessage = 'Por favor complete todos los campos.';
+      return;
+    }
+
+    this.http.post('http://localhost:8080/api/clientes/register', this.registerData).subscribe({
+      next: () => {
+        alert('Cliente registrado correctamente.');
+        this.closeRegisterModal();
+      },
+      error: (err) => {
+        console.error(err);
+        this.loginErrorMessage = 'Error al registrar usuario.';
+      }
+    });
   }
 }

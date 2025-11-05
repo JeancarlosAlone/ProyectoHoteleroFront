@@ -248,4 +248,25 @@ export class HabitacionDetalleComponent implements OnInit {
     this.mostrarMenuServicios = false;
     console.log('Servicios seleccionados:', this.serviciosSeleccionados);
   }
+
+  // Regresar a la vista anterior
+regresar() {
+  this.router.navigate(['/reservar']); 
+}
+
+// Limpiar formulario
+limpiarCampos() {
+  this.cliente = {
+    nombre: '',
+    apellido: '',
+    dpi: '',
+    telefono: '',
+    email: '',
+    numPersonas: 1,
+    fechaInicio: this.minFechaEntrada,
+    fechaFin: ''
+  };
+  this.errores = {};
+}
+
 }

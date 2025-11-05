@@ -1,7 +1,11 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { ReservaService } from '../services/reserva.service';
+import { HuespedService } from '../Huesped/huesped.service';
+import { RoomsService } from '../Habitaciones/rooms.service';
+import { TypesRoomsStatus } from '../Habitaciones/rooms.model';
 
 declare global {
   interface Window { paypal: any; }
@@ -15,6 +19,7 @@ declare global {
   styleUrls: ['./pago-reserva.component.css']
 })
 export class PagoReservaComponent implements OnInit, AfterViewInit {
+  origen: 'cliente' | 'usuario' = 'cliente';
   habitacion: any = null;
   cliente: any = null;
   serviciosSeleccionados: any[] = [];
@@ -23,21 +28,91 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
   mostrarModal = false;
   mensajeModal = '';
 
-  // NUEVO MÉTODO
-  mostrarModalConMensaje(mensaje: string) {
-    this.mensajeModal = mensaje;
-    this.mostrarModal = true;
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private reservaService: ReservaService,
+    private huespedService: HuespedService,
+    private roomsService: RoomsService,
+    private ngZone: NgZone
+  ) {}
 
-    setTimeout(() => {
-      this.mostrarModal = false;
-      this.router.navigate(['/reservar']);
-    }, 3000);
+  private isUserContext(): boolean {
+    const path = window.location.pathname;
+    const esRutaUsuario = path.startsWith('/SACH/') || document.referrer.includes('/SACH/');
+    const tieneIdUser = !!localStorage.getItem('idUser');
+    return esRutaUsuario && tieneIdUser;
   }
 
-  constructor(private router: Router, private reservaService: ReservaService) { }
+  private navigateHard(target: string) {
+    this.ngZone.run(() => {
+      this.router.navigateByUrl(target).catch(() => window.location.assign(target));
+    });
+    setTimeout(() => {
+      if (window.location.pathname !== target) window.location.assign(target);
+    }, 400);
+  }
+
+  private async registrarYRedirigir(esUsuario: boolean) {
+    const reserva = this.reservaService.getReserva();
+    if (!reserva || !reserva.habitacion || !reserva.cliente) {
+      this.navigateHard(esUsuario ? '/SACH/habitaciones' : '/reservar');
+      return;
+    }
+
+    const idUser = localStorage.getItem('idUser');
+    const req: any = {
+      nameHuesped: reserva.cliente.nombre,
+      apellidoHuesped: reserva.cliente.apellido,
+      telefono: reserva.cliente.telefono,
+      numPersonas: reserva.cliente.numPersonas,
+      monto: reserva.total,
+      statusHuesped: 'pagado',
+      fechaRegistro: reserva.cliente.fechaInicio,
+      fechaSalida: reserva.cliente.fechaFin,
+      tipoRegistro: esUsuario ? 'manual' : 'enLinea',
+      habitacionAsignada: { id_Rooms: reserva.habitacion.id_Rooms },
+
+      // 👇 NUEVO: Enviar los servicios seleccionados al backend
+      serviciosSeleccionados: reserva.serviciosSeleccionados || []
+    };
+
+    if (esUsuario && idUser) req.usuarioRegistrador = { id_users: String(idUser) };
+
+    try {
+      await firstValueFrom(this.huespedService.createHuesped(req));
+
+      try {
+        await firstValueFrom(
+          this.roomsService.changeStatus(
+            reserva.habitacion.id_Rooms,
+            TypesRoomsStatus.ocupada
+          )
+        );
+      } catch {
+        console.warn('⚠ No se pudo actualizar el estado, pero se registró el huésped.');
+      }
+
+      this.mostrarModalConMensaje('✅ Reserva registrada con éxito.');
+
+      setTimeout(() => {
+        this.reservaService.clearReserva();
+        this.navigateHard(esUsuario ? '/SACH/habitaciones' : '/reservar');
+      }, 3500);
+    } catch (err) {
+      console.error('Error al registrar huésped:', err);
+      this.mostrarModalConMensaje('Ocurrió un error al registrar la reserva.');
+      setTimeout(() => {
+        this.navigateHard(esUsuario ? '/SACH/habitaciones' : '/reservar');
+      }, 3500);
+    }
+  }
 
   ngOnInit(): void {
     const data = this.reservaService.getReserva();
+    this.route.queryParams.subscribe(params => {
+      this.origen = params['origen'] === 'usuario' ? 'usuario' : 'cliente';
+    });
 
     if (!data) {
       alert('No hay datos de reserva disponibles.');
@@ -48,22 +123,40 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
     this.habitacion = data.habitacion;
     this.cliente = data.cliente;
     this.serviciosSeleccionados = data.serviciosSeleccionados || [];
-    this.total = data.total || 0;
 
-    console.log('Datos cargados desde ReservaService:', data);
+    // 🧮 Cálculo de noches
+    const fechaInicio = new Date(this.cliente.fechaInicio);
+    const fechaFin = new Date(this.cliente.fechaFin);
+    const noches = Math.max(1, Math.ceil((+fechaFin - +fechaInicio) / (1000 * 60 * 60 * 24)));
+
+    // 💵 Precio base habitación
+    const precioBase = Number(this.habitacion?.precio) || 0;
+
+    // 🧾 Total de servicios adicionales
+    const totalServicios = this.serviciosSeleccionados.reduce(
+      (acc: number, s: any) => acc + Number(s.precioFinal || s.precio || 0),
+      0
+    );
+
+    // 💰 Total general = precio × noches + servicios
+    this.total = (precioBase * noches) + totalServicios;
+
+    console.log('📅 Noches:', noches);
+    console.log('🏨 Precio base habitación:', precioBase);
+    console.log('🧾 Total servicios adicionales:', totalServicios);
+    console.log('💰 Total general:', this.total);
+
+    this.mensaje = '';
   }
 
   ngAfterViewInit(): void {
     this.intentarRenderizarBoton();
   }
 
-  calcularTotal() {
-    const precioBase = Number(this.habitacion?.precio) || 0;
-    const extras = this.serviciosSeleccionados.reduce(
-      (acc, s) => acc + (s.precioFinal || s.precio || 0),
-      0
-    );
-    this.total = precioBase + extras;
+  private mostrarModalConMensaje(mensaje: string) {
+    this.mensajeModal = mensaje;
+    this.mostrarModal = true;
+    setTimeout(() => (this.mostrarModal = false), 1200);
   }
 
   private intentarRenderizarBoton() {
@@ -99,37 +192,48 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
       },
 
       onApprove: async (data: any) => {
-        this.mensaje = 'Procesando pago...';
+        try {
+          this.mensaje = 'Procesando pago...';
 
-        const res = await fetch('http://localhost:8080/api/pagos/capturar-orden', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId: data.orderID })
-        });
-        const result = await res.json();
-
-        if (result) {
-          // Generar factura y enviarla por correo
-          const facturaRes = await fetch('http://localhost:8080/api/facturas/generar', {
+          const cap = await fetch('http://localhost:8080/api/pagos/capturar-orden', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              cliente: this.cliente,
-              habitacion: this.habitacion,
-              serviciosSeleccionados: this.serviciosSeleccionados,
-              total: this.total,
-            })
+            body: JSON.stringify({ orderId: data.orderID })
           });
+          const capJson = await cap.json();
+          if (!capJson) throw new Error('No se pudo capturar la orden');
 
-          const facturaData = await facturaRes.json();
-
-          if (facturaData.ok) {
-            this.mostrarModalConMensaje(`✅ Factura enviada al correo ${this.cliente.email}`);
-          } else {
-            this.mostrarModalConMensaje('⚠️ Pago realizado, pero hubo un problema al generar o enviar la factura.');
+          // Generar factura
+          try {
+            const fac = await fetch('http://localhost:8080/api/facturas/generar', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                cliente: this.cliente,
+                habitacion: this.habitacion,
+                serviciosSeleccionados: this.serviciosSeleccionados,
+                total: this.total
+              })
+            });
+            const facJson = await fac.json();
+            this.mostrarModalConMensaje(
+              facJson?.ok
+                ? `Factura enviada al correo ${this.cliente?.email || ''}`
+                : 'Pago realizado, pero hubo un problema al generar/enviar la factura.'
+            );
+          } catch {
+            this.mostrarModalConMensaje(
+              'Pago realizado, pero hubo un problema al generar/enviar la factura.'
+            );
           }
 
-          this.reservaService.clearReserva();
+          const esUsuario = this.isUserContext();
+          this.registrarYRedirigir(esUsuario);
+        } catch (err) {
+          console.error(err);
+          this.mensaje = 'Error en PayPal';
+          const esUsuario = this.isUserContext();
+          this.navigateHard(esUsuario ? '/SACH/habitaciones' : '/reservar');
         }
       },
 

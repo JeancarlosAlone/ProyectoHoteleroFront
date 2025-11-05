@@ -1,19 +1,74 @@
 <div class="huesped-container">
-  <h2>Gestión de Huéspedes</h2>
+  <div class="header-section">
 
+    <div class="filters">
+      <input
+        type="text"
+        class="filter-input"
+        placeholder="Buscar por nombre o teléfono..."
+        [(ngModel)]="filtroGeneral"
+        (input)="aplicarFiltros()"
+      />
+
+      <input
+        type="date"
+        class="filter-date"
+        [(ngModel)]="filtroFecha"
+        (change)="aplicarFiltros()"
+      />
+    </div>
+  </div>
+
+  <!-- 🔹 Tabs -->
   <div class="tabs">
     <button [class.active]="activeTab === 'todos'" (click)="setActive('todos')">Todos</button>
     <button [class.active]="activeTab === 'manual'" (click)="setActive('manual')">Manual</button>
     <button [class.active]="activeTab === 'enLinea'" (click)="setActive('enLinea')">En línea</button>
   </div>
 
-  <div class="huesped-grid">
+  <!-- 🔹 Indicador de resultados -->
+  <div class="result-info" *ngIf="huespedesFiltrados.length > 0">
+    {{ huespedesFiltrados.length }} huésped{{ huespedesFiltrados.length > 1 ? 'es' : '' }} encontrado{{ huespedesFiltrados.length > 1 ? 's' : '' }}
+  </div>
+
+  <!-- 🔹 Mensaje si no hay huéspedes -->
+  <div class="no-results" *ngIf="huespedesFiltrados.length === 0">
+    <p>No hay huéspedes registrados para los filtros aplicados.</p>
+  </div>
+
+  <!-- 🔹 Cards -->
+  <div class="huesped-grid" *ngIf="huespedesFiltrados.length > 0">
     <div *ngFor="let huesped of huespedesFiltrados" class="huesped-card">
       <h3>{{ huesped.nameHuesped }} {{ huesped.apellidoHuesped }}</h3>
       <p><strong>Tel:</strong> {{ huesped.telefono }}</p>
       <p><strong>Habitación:</strong> {{ huesped.habitacionAsignada?.id_Rooms }}</p>
-      <p><strong>Estado:</strong> {{ huesped.statusHuesped }}</p>
+
+      <p>
+        <strong>Estado:</strong>
+        <span [ngClass]="{
+          'estado-pagado': huesped.statusHuesped === 'pagado',
+          'estado-pendiente': huesped.statusHuesped === 'pendiente de pago'
+        }">
+          {{ huesped.statusHuesped | titlecase }}
+        </span>
+      </p>
+
       <p><strong>Registro:</strong> {{ huesped.tipoRegistro | titlecase }}</p>
+
+      <!-- 🔹 Switch -->
+      <div *ngIf="huesped.statusHuesped === 'pagado'" class="switch-container">
+        <label class="switch-label">Terminar estadía:</label>
+        <label class="switch">
+          <input
+            type="checkbox"
+            [checked]="huesped.habitacionAsignada?.estado === 'libre'"
+            (change)="terminarEstadia(huesped, $event)"
+            [disabled]="huesped.habitacionAsignada?.estado === 'libre'"
+          />
+          <span class="slider"></span>
+        </label>
+        <small *ngIf="huesped.habitacionAsignada?.estado === 'libre'">Finalizada</small>
+      </div>
     </div>
   </div>
 </div>

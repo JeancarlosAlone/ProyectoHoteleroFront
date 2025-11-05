@@ -55,8 +55,9 @@ export const routes: Routes = [
       {
         path: 'huesped',
         loadComponent: () => import('./Huesped/huesped/huesped.component').then(c => c.HuespedComponent),
-        data: { title: 'Gestion de Huespedes' }
-      },
+        data: { title: 'Gestión de Huéspedes', requiredRole: ['admin', 'user'] }
+      }
+      ,
       {
         path: 'RegistroHuesped/:id',
         loadComponent: () => import('./reservacion/reservacion.component').then(c => c.ReservacionComponent),

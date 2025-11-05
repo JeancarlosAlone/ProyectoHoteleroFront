@@ -1,142 +1,113 @@
-<div class="payment-page">
-  <!-- COLUMNA IZQUIERDA: formulario y botones -->
-  <div class="form-col">
-    <h2 class="page-title">Pago con PayPal</h2>
+<div class="pago-container">
+  <h2>💳 Pago de Reserva</h2>
 
-    <!-- búsqueda -->
-    <div class="row search-row">
-      <input
-        class="search-input"
-        type="text"
-        [(ngModel)]="clienteIdentifier"
-        placeholder="Buscar cliente por nombre"
-      />
-      <button class="search-btn" (click)="buscarCliente()">Buscar</button>
-    </div>
-
-    <!-- fila controles: total | ajustar | nit -->
-    <div class="row controls-row">
-      <div class="controls-total">
-        <div class="total-label">TOTAL ({{ moneda }})</div>
-        <div class="total-display-inline">
-          {{ total | number:'1.2-2' }}
-        </div>
-      </div>
-
-      <div class="controls-adjust">
-        <label class="small-label">Ajustar monto</label>
-        <input
-          class="total-input-inline"
-          type="number"
-          [(ngModel)]="total"
-          min="0"
-          step="0.01"
-        />
-      </div>
-
-      <div class="controls-nit">
-        <label class="nit-label-inline">NIT / N°FACT</label>
-        <input
-          class="nit-input-inline"
-          type="text"
-          [(ngModel)]="nitFactura"
-          placeholder="NIT o CF"
-        />
-      </div>
-    </div>
-
-    <!-- PayPal buttons -->
-    <div id="paypal-button-container" class="paypal-container"></div>
-
-    <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
+  <!-- ===================== BÚSQUEDA ===================== -->
+  <div class="busqueda">
+    <input
+      type="text"
+      placeholder="Buscar cliente por nombre"
+      [(ngModel)]="clienteIdentifier"
+    />
+    <input
+      type="date"
+      [(ngModel)]="fechaFiltro"
+      title="Filtrar por fecha de ingreso o salida"
+    />
+    <button (click)="buscarCliente()">Buscar</button>
   </div>
 
-  <!-- COLUMNA DERECHA: tarjeta con los datos del cliente (ocupa todo el espacio a la derecha) -->
-  <div class="info-col">
-    <ng-container *ngIf="cliente; else noCliente">
-      <div class="info-card">
-        <h3 class="info-title">Cliente</h3>
+  <hr />
 
-        <div class="info-row">
-          <div class="info-field">
-            <span class="f-label">Nombre</span>
-            <span class="f-value">{{ cliente.nameHuesped || cliente.name || '—' }}</span>
-          </div>
-          <div class="info-field">
-            <span class="f-label">Apellido</span>
-            <span class="f-value">{{ cliente.apellidoHuesped || cliente.apellido || '—' }}</span>
-          </div>
-        </div>
+  <!-- ===================== RESUMEN ===================== -->
+  <div *ngIf="cliente; else noCliente">
+    <div class="resumen">
+      <h3>Resumen de la habitación</h3>
+      <p><strong>ID:</strong> {{ habitacion?.id_Rooms }}</p>
+      <p><strong>Tipo:</strong> {{ habitacion?.habitacion | titlecase }}</p>
+      <p><strong>Nivel:</strong> {{ habitacion?.nivel }}</p>
+      <p><strong>Precio por noche:</strong> Q {{ precioPorNoche | number: '1.2-2' }}</p>
 
-        <div class="info-row">
-          <div class="info-field">
-            <span class="f-label">Teléfono</span>
-            <span class="f-value">{{ cliente.telefono || '—' }}</span>
-          </div>
-          <div class="info-field">
-            <span class="f-label"># Personas</span>
-            <span class="f-value">{{ cliente.numPersonas ?? '—' }}</span>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-field full">
-            <span class="f-label">Habitación</span>
-            <span class="f-value">
-              {{ cliente.habitacionAsignada?.habitacion ? (cliente.habitacionAsignada.habitacion + ' — ' + (cliente.habitacionAsignada?.id_Rooms || '')) : 'Sin habitación asignada' }}
+      <h3>Servicios adicionales</h3>
+      <div *ngIf="serviciosSeleccionados.length > 0; else sinServicios">
+        <ul>
+          <li *ngFor="let servicio of serviciosSeleccionados">
+            {{ servicio.nombre }} —
+            <span *ngIf="servicio.precioFinal !== undefined">
+              Q {{ servicio.precioFinal }}
+              <small *ngIf="servicio.descuento && servicio.descuento > 0">
+                ({{ servicio.descuento }}% desc.)
+              </small>
             </span>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-field">
-            <span class="f-label">Fecha ingreso</span>
-            <span class="f-value">{{ cliente.fechaRegistro | date:'dd/MM/yyyy' }}</span>
-          </div>
-          <div class="info-field">
-            <span class="f-label">Fecha salida</span>
-            <span class="f-value">{{ cliente.fechaSalida | date:'dd/MM/yyyy' }}</span>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-field">
-            <span class="f-label">Noches</span>
-            <span class="f-value">{{ noches }}</span>
-          </div>
-          <div class="info-field">
-            <span class="f-label">Precio por noche ({{ moneda }})</span>
-            <span class="f-value">{{ precioPorNoche | number:'1.2-2' }}</span>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-field">
-            <span class="f-label">Estado</span>
-            <span class="f-value">{{ cliente.statusHuesped || '—' }}</span>
-          </div>
-          <div class="info-field">
-            <span class="f-label">Monto (por reserva)</span>
-            <span class="f-value">{{ cliente.monto | number:'1.2-2' }}</span>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-field full">
-            <span class="f-label">Registrado por</span>
-            <span class="f-value">
-              {{ cliente.usuarioRegistrador?.name ? (cliente.usuarioRegistrador.name + ' ' + (cliente.usuarioRegistrador.apellido || '')) : '—' }}
+            <span *ngIf="servicio.precioFinal === undefined">
+              Q {{ servicio.precio }}
             </span>
-          </div>
-        </div>
+          </li>
+        </ul>
+        <p><strong>Total servicios:</strong> Q {{ cliente?.totalServicios || 0 | number: '1.2-2' }}</p>
       </div>
-    </ng-container>
+      <ng-template #sinServicios>
+        <p class="texto-secundario">Sin servicios adicionales seleccionados.</p>
+      </ng-template>
 
-    <ng-template #noCliente>
-      <div class="info-empty">
-        <p>No hay cliente seleccionado.</p>
-        <p>Busca por nombre y el detalle aparecerá aquí.</p>
+      <hr />
+
+      <h3>Datos del cliente</h3>
+      <p><strong>Nombre:</strong> {{ cliente?.nameHuesped }} {{ cliente?.apellidoHuesped }}</p>
+      <p><strong>Teléfono:</strong> {{ cliente?.telefono }}</p>
+      <p><strong>Número de personas:</strong> {{ cliente?.numPersonas }}</p>
+      <p><strong>Estado:</strong> {{ cliente?.statusHuesped }}</p>
+
+      <hr />
+
+      <!-- ===================== CAMPO DE CORREO OBLIGATORIO ===================== -->
+      <div class="correo-container">
+        <label for="correo">Correo electrónico (obligatorio para enviar factura):</label>
+        <input
+          id="correo"
+          type="email"
+          [(ngModel)]="emailCliente"
+          placeholder="ejemplo@correo.com"
+          required
+          (input)="verificarCorreo()"
+          [class.invalid]="!correoValido && emailCliente"
+        />
+        <p *ngIf="!correoValido && emailCliente" class="error-text">
+          Ingrese un correo válido antes de continuar.
+        </p>
       </div>
+
+      <hr />
+
+      <h3>Total a pagar: <span class="total">Q {{ total | number: '1.2-2' }}</span></h3>
+    </div>
+
+    <!-- ===================== BOTONES PAYPAL ===================== -->
+    <div *ngIf="correoValido; else noCorreo">
+      <div id="paypal-button-container"></div>
+    </div>
+
+    <ng-template #noCorreo>
+      <p class="mensaje-pago aviso">
+        ⚠️ Ingrese un correo válido para habilitar el pago.
+      </p>
     </ng-template>
+  </div>
+
+  <!-- ===================== SIN CLIENTE ===================== -->
+  <ng-template #noCliente>
+    <p class="texto-secundario">
+      🔍 Busque un cliente pendiente de pago para mostrar los detalles aquí.
+    </p>
+  </ng-template>
+
+  <!-- ===================== MENSAJE GENERAL ===================== -->
+  <p class="mensaje-pago">{{ mensaje }}</p>
+</div>
+
+<!-- ===================== MODAL ===================== -->
+<div *ngIf="mostrarModal" class="modal-backdrop">
+  <div class="modal-contenido">
+    <h2>{{ mensajeModal }}</h2>
+    <p>Será redirigido automáticamente...</p>
   </div>
 </div>

@@ -9,6 +9,7 @@ import { HuespedRequest, HuespedResponse } from './huesped.model';
 export class HuespedService {
   private _http = inject(HttpClient);
   private huespedUrl = 'http://localhost:8080/huesped';
+  private roomsUrl = 'http://localhost:8080/rooms'; 
 
   private huespedSubject = new BehaviorSubject<HuespedResponse[]>([]);
   huesped$ = this.huespedSubject.asObservable();
@@ -16,13 +17,13 @@ export class HuespedService {
   private huespedAEditarSubject = new BehaviorSubject<HuespedResponse | null>(null);
   huespedAEditar$ = this.huespedAEditarSubject.asObservable();
 
-  // === NUEVO: campo para cachear los resultados filtrados ===
   private manualHuespedes: HuespedResponse[] = [];
   private enLineaHuespedes: HuespedResponse[] = [];
 
-  // ============================
-  // 🔹 MÉTODOS EXISTENTES
-  // ============================
+  // ======================================================
+  // 🔹 MÉTODOS BASE DE HUÉSPEDES
+  // ======================================================
+
   setHuespedAEditar(huesped: HuespedResponse) {
     this.huespedAEditarSubject.next(huesped);
   }
@@ -44,17 +45,14 @@ export class HuespedService {
       const nuevos = huespedes.map(h => ({ ...h }));
       this.huespedSubject.next(nuevos);
 
-      // NUEVO: clasificar por tipoRegistro si existe
+      // Clasificación por tipoRegistro
       this.manualHuespedes = nuevos.filter(h => h.tipoRegistro === 'manual');
       this.enLineaHuespedes = nuevos.filter(h => h.tipoRegistro === 'enLinea');
     });
   }
 
-  getHuespedes(): Observable<HuespedResponse[]> {
-    if (this.huespedSubject.value.length === 0) {
-      this.loadHuespedes(); // Solo carga si está vacío
-    }
-    return this.huesped$;
+  getHuespedes(tipo: 'todos' | 'manual' | 'enlinea' = 'todos') {
+    return this._http.get<HuespedResponse[]>(`${this.huespedUrl}?tipo=${tipo}`);
   }
 
   getHuespedbyId(id: string): Observable<HuespedResponse> {
@@ -79,27 +77,16 @@ export class HuespedService {
     );
   }
 
-  // ============================
-  // 🔹 NUEVOS MÉTODOS DE FILTRO
-  // ============================
-
-  /** Obtiene todos los huéspedes manuales */
-  getHuespedesManuales(): Observable<HuespedResponse[]> {
-    if (this.manualHuespedes.length > 0) {
-      return of(this.manualHuespedes);
-    }
-    return this._http.get<HuespedResponse[]>(`${this.huespedUrl}?tipoRegistro=manual`).pipe(
-      tap(huespedes => this.manualHuespedes = huespedes)
-    );
-  }
-
-  /** Obtiene todos los huéspedes registrados en línea */
-  getHuespedesEnLinea(): Observable<HuespedResponse[]> {
-    if (this.enLineaHuespedes.length > 0) {
-      return of(this.enLineaHuespedes);
-    }
-    return this._http.get<HuespedResponse[]>(`${this.huespedUrl}?tipoRegistro=enLinea`).pipe(
-      tap(huespedes => this.enLineaHuespedes = huespedes)
+  // ======================================================
+  // 🔹 NUEVO MÉTODO: ACTUALIZAR ESTADO DE HABITACIÓN
+  // ======================================================
+  actualizarEstadoHabitacion(idRoom: number, nuevoEstado: string): Observable<any> {
+    return this._http.patch(`${this.roomsUrl}/${idRoom}/estado`, { estado: nuevoEstado }).pipe(
+      tap(() => console.log(`Habitación ${idRoom} actualizada a estado: ${nuevoEstado}`)),
+      catchError(err => {
+        console.error('Error al actualizar la habitación:', err);
+        return throwError(() => err);
+      })
     );
   }
 }

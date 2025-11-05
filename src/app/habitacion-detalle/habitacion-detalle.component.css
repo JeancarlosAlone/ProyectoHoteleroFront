@@ -1,148 +1,274 @@
+/* ==================== FONDO Y CONTENEDOR GENERAL ==================== */
+body {
+  background: radial-gradient(circle at top, #fefefe, #e8ebf3);
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
 
 .detalle-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  padding: 2rem;
-  background: radial-gradient(circle at center, #e8e8f0 0%, #0c1230 100%);
-  font-family: 'Montserrat', 'Segoe UI', sans-serif;
-  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 20px 60px;
+  color: #001b44;
+}
+
+/* ==================== ENCABEZADO Y BOTÓN REGRESAR ==================== */
+.header-detalle {
+  width: 100%;
+  max-width: 1300px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.btn-regresar {
+  background: #0c2340;
+  color: #ffffff;
+  border: 2px solid #d4af37;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 20px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-regresar i {
+  color: #d4af37;
+}
+
+.btn-regresar:hover {
+  background: #d4af37;
+  color: #0c2340;
+  border-color: #0c2340;
+  transform: translateY(-1px);
+}
+
+.btn-regresar:hover i {
+  color: #0c2340;
+}
+
+/* ==================== IMAGEN PRINCIPAL ==================== */
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1300px;
+  height: 85vh;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.room-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+  border-radius: 18px;
+}
+
+.room-image:hover {
+  transform: scale(1.03);
+}
+
+/* ==================== SECCIÓN DE BLOQUES ==================== */
+.bloques-inferiores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 40px;
 }
 
 .bloque {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 25px 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  flex: 1 1 480px;
+  transition: 0.3s ease;
 }
 
-/* --- BLOQUE 1: Imagen --- */
-.imagen img {
-  width: 100%;
-  height: 100%;
-  max-height: 420px;
-  object-fit: cover;
-  border-radius: 12px;
+.bloque:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* --- BLOQUE 2: Datos habitación --- */
-.detalle-habitacion {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+/* ==================== TÍTULOS ==================== */
+h3 {
+  color: #0c2340;
+  border-bottom: 3px solid #caa21c;
+  display: inline-block;
+  padding-bottom: 6px;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
-.detalle-habitacion h3 {
-  color: #0c2344;
-  margin-bottom: 1rem;
+/* ==================== INPUTS ==================== */
+label {
+  font-weight: 600;
+  color: #001b44;
 }
 
-.detalle-habitacion p {
-  margin: 0.3rem 0;
-  color: #222;
-}
-
-.btn-servicios {
-  background: #0c2344;
-  color: white;
-  border: none;
-  padding: 0.7rem 1.2rem;
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"] {
+  width: 95%;
+  padding: 10px 15px;
+  border: 1px solid #c9d1e0;
   border-radius: 8px;
-  cursor: pointer;
-  width: fit-content;
-  margin-top: 0.8rem;
-  transition: 0.3s;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  font-size: 15px;
+  background: #f9fafc;
+  transition: 0.2s;
+}
+
+input:focus {
+  border-color: #caa21c;
+  box-shadow: 0 0 0 3px rgba(202, 162, 28, 0.2);
+  background: #fff;
+}
+
+/* ==================== CAMPOS OBLIGATORIOS Y MENSAJES DE ERROR ==================== */
+.obligatorio {
+  color: #d62828;
+  font-weight: 700;
+}
+
+.mensaje-error {
+  display: inline-block;
+  margin-top: -6px;
+  margin-bottom: 12px;
+  background: rgba(214, 40, 40, 0.06);
+  color: #a30000;
+  font-size: 13px;
+  padding: 5px 10px;
+  border-left: 3px solid #d62828;
+  border-radius: 6px;
   font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.mensaje-error::before {
+  content: "⚠ ";
+  color: #d62828;
+  font-weight: bold;
+}
+
+input.ng-invalid.ng-touched {
+  border-color: #d62828 !important;
+  background: #fffafa;
+  box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.12);
+}
+
+/* ==================== BOTONES ==================== */
+.btn-limpiar,
+.btn-servicios,
+.btn-pago {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+/* Botón Limpiar */
+.btn-limpiar {
+  background: #f0f0f0;
+  color: #0c2340;
+  border: 2px solid transparent;
+}
+
+.btn-limpiar:hover {
+  background: #dcdcdc;
+  transform: translateY(-1px);
+}
+
+/* Botón Servicios */
+.btn-servicios {
+  background: transparent;
+  color: #caa21c;
+  border: 2px solid #caa21c;
 }
 
 .btn-servicios:hover {
-  background: #d4af37;
-  color: #0c2344;
+  background: #caa21c;
+  color: #fff;
 }
 
-.servicios-seleccionados {
-  margin-top: 1rem;
+/* Botón Pagar */
+.btn-pago {
+  background: #0c2340;
+  color: #fff;
+  border: 2px solid #0c2340;
 }
 
-.servicios-seleccionados h4 {
-  margin-bottom: 0.4rem;
-  color: #0c2344;
+.btn-pago:hover {
+  background: #caa21c;
+  color: #0c2340;
+  border-color: #caa21c;
+  box-shadow: 0 6px 15px rgba(202, 162, 28, 0.4);
 }
 
-/* --- FORMULARIO CLIENTE: UNA SOLA COLUMNA --- */
-.cliente form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.cliente label {
-  font-weight: 500;
-  color: #0c2344;
-}
-
-.cliente input {
-  width: 90%;
-  padding: 0.6rem 0.8rem;
-  border: 2px solid #0c2344;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-/* efecto visual al enfocar */
-.cliente input:focus {
-  outline: none;
-  border-color: #d4af37;
-  box-shadow: 0 0 5px rgba(212, 175, 55, 0.6);
-}
-
-button {
-  background-color: #0c2344;
-  color: white;
-  border: none;
-  padding: 0.8rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #d4af37;
-  color: #0c2344;
-}
-
-
-/* === RESPONSIVE === */
-@media (max-width: 800px) {
-  .cliente form {
-    grid-template-columns: 1fr;
-  }
-
-  .cliente button {
-    grid-column: 1;
-  }
-}
-
-
-
-
-/* --- ESTADOS --- */
+/* ==================== ESTADOS DE HABITACIÓN ==================== */
 .estado-libre {
-  color: green;
-  font-weight: bold;
+  color: #27ae60;
+  font-weight: 700;
 }
 
 .estado-ocupada {
-  color: red;
-  font-weight: bold;
+  color: #e74c3c;
+  font-weight: 700;
 }
 
-/* --- MODAL --- */
+/* ==================== SERVICIOS SELECCIONADOS ==================== */
+.servicios-seleccionados {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  border-left: 4px solid #caa21c;
+}
+
+.servicios-seleccionados h4 {
+  color: #0c2340;
+  margin-bottom: 10px;
+}
+
+.servicios-seleccionados li {
+  color: #001b44;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.tachado {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 5px;
+}
+
+/* ============================================================
+   🔵 MODAL DE SERVICIOS — MISMO ESTILO QUE LAS TARJETAS
+============================================================ */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -150,129 +276,211 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
 }
 
-.modal-contenido {
-  background: white;
-  border-radius: 12px;
-  width: 85%;
-  max-width: 900px;
-  padding: 2rem;
-  max-height: 85vh;
+.modal-servicios {
+  background: radial-gradient(circle at top, #0c2340, #030e1c);
+  width: 90%;
+  max-width: 1100px;
+  max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  animation: slideIn 0.4s ease;
+}
+
+/* Header del modal */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 1rem;
+}
+
+.modal-header h3 {
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #ffffff;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  color: #caa21c;
+}
+
+/* Contenido del modal */
+.info-noches {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border-left: 5px solid #caa21c;
+  margin-bottom: 1.2rem;
+  font-size: 0.95rem;
+}
+
+/* Tarjetas de servicios */
+.servicios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
 }
 
 .servicio-card {
-  display: flex;
-  gap: 1rem;
-  border-bottom: 1px solid #ddd;
-  padding: 1rem 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.servicio-card img {
-  width: 130px;
-  height: 90px;
-  border-radius: 8px;
+.servicio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.servicio-img {
+  width: 100%;
+  height: 160px;
   object-fit: cover;
 }
 
-.info-servicio {
-  flex: 1;
+.servicio-info {
+  padding: 1rem;
 }
 
+.servicio-info h4 {
+  color: #0c2340;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.servicio-info p {
+  color: #444;
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+}
+
+.precio-original {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.precio-final {
+  color: #27ae60;
+  font-weight: 700;
+}
+
+.badge-descuento {
+  background: #caa21c;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+
+/* Check de selección */
+.check-servicio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.check-servicio input {
+  accent-color: #caa21c;
+  width: 18px;
+  height: 18px;
+}
+
+.check-servicio span {
+  color: #001b44;
+  font-weight: 500;
+}
+
+/* Botones del modal */
 .modal-acciones {
-  text-align: right;
-  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+.btn-guardar,
+.btn-cerrar {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
 
 .btn-guardar {
-  background: #0c2344;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-right: 0.5rem;
+  background: #caa21c;
+  color: #0c2340;
+}
+
+.btn-guardar:hover {
+  background: #b8860b;
+  color: #ffffff;
 }
 
 .btn-cerrar {
-  background: #d4af37;
-  color: #0c2344;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
+  background: #e2e2e2;
+  color: #333;
 }
 
-/* --- Responsive (pantallas pequeñas) --- */
-@media (max-width: 900px) {
-  .detalle-container {
-    grid-template-columns: 1fr;
+.btn-cerrar:hover {
+  background: #bbb;
+}
+
+/* ==================== ANIMACIONES ==================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .image-wrapper {
+    height: 60vh;
   }
 
-  .cliente form {
-    grid-template-columns: 1fr;
+  .bloques-inferiores {
+    flex-direction: column;
+    padding: 0 10px;
+  }
+
+  .btn-regresar {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .bloque {
+    padding: 20px;
+  }
+
+  .modal-servicios {
+    width: 95%;
+    padding: 1.5rem;
   }
 }
-
-/* --- NUEVO ajuste para el botón de pago --- */
-.btn-pago {
-  margin-top: 1rem;
-  background-color: #0c2344;
-  color: white;
-  border: none;
-  padding: 0.8rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-}
-
-.btn-pago:hover {
-  background-color: #d4af37;
-  color: #0c2344;
-}
-
-/* === Estilos de descuentos === */
-.precio-descuento {
-  font-size: 1rem;
-  margin-top: 0.3rem;
-}
-
-.tachado {
-  text-decoration: line-through;
-  color: #888;
-  margin-right: 0.4rem;
-}
-
-.nuevo-precio {
-  color: #0c2344;
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-.mensaje-descuento {
-  display: block;
-  color: #d4af37;
-  font-weight: 500;
-  margin-top: 0.2rem;
-}
-
-
-.obligatorio {
-  color: red;
-  font-weight: bold;
-}
-
-.mensaje-error {
-  color: red;
-  font-size: 13px;
-  margin-top: 2px;
-  margin-bottom: 8px;
-  font-style: italic;
-}
-
-

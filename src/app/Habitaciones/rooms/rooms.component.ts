@@ -75,6 +75,7 @@ console.log(this.rooms);
     },
   });
   }
+  
 
   abrirFormularioRooms(room: Room | null) {
     const dialogRef = this.dialog.open(RegistroRoomsComponent, {
@@ -97,6 +98,18 @@ console.log(this.rooms);
       }
     });
   }
+
+  eliminarHabitacion(id: number): void {
+  this.roomsService.deleteRoom(id).subscribe({
+    next: () => {
+      this.cargarHabitaciones();
+    },
+    error: (err) => {
+      console.error('Error al eliminar habitación:', err);
+    },
+  });
+}
+
 
   buscarHabitacionPorId() {
 

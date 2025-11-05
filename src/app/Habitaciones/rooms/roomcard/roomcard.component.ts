@@ -1,84 +1,57 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Room } from '../../rooms.model';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RoomsService } from '../../rooms.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { RoomsComponent } from '../rooms.component';
-import { RouterLink } from '@angular/router';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { Room, TypesRooms, TypesRoomsStatus } from '../../rooms.model';
 
 @Component({
   selector: 'app-roomcard',
-  imports: [CommonModule,RouterLink,MatBadgeModule, MatIconModule],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './roomcard.component.html',
-  styleUrl: './roomcard.component.css'
+  styleUrls: ['./roomcard.component.css'],
 })
-export class RoomcardComponent implements OnInit {
+export class RoomcardComponent {
+  @Input() room!: Room;
+  @Input() admin: boolean = false;
 
-admin: boolean=false;
-@Input() room!: Room;
+  @Output() editarHabitacion = new EventEmitter<Room>();
+  @Output() eliminarHabitacion = new EventEmitter<number>();
 
-  constructor(private roomService:RoomsService,
-    private snackBar: MatSnackBar,
-    private roomComponent: RoomsComponent,
-  ) { }
+  constructor(private router: Router) {}
 
-  ngOnInit(): void {
-    this.isAdmin();
+  /** Redirección al detalle */
+  verHabitacion(id: number): void {
+    this.router.navigate(['/SACH/RegistroHuesped', id]);
   }
 
- isAdmin() {
-  const localrol=localStorage.getItem('rol');
-  if(localrol=='admin'){
-  this.admin=true;
-  }
- }
- tieneMensaje(): boolean {
-    if (!this.room?.id_Rooms) return false;
-    const clave = `mensajeHabitacion_${this.room.id_Rooms}`;
-    const mensaje = localStorage.getItem(clave);
-    return mensaje !== null && mensaje.trim().length > 0;
+  /** Clase visual del estado */
+  getEstadoClass(estado: TypesRoomsStatus): string {
+    return `estado-${estado}`;
   }
 
-
-  getEstadoUppercase(estado: string): string {
-    return estado.toUpperCase();
-  }
-
-  getClaseEstado(estado: string): string {
-    const estadoLower = estado.toLowerCase();
-    switch (estadoLower) {
-      case 'ocupada': return 'OCUPADA';
-      case 'libre': return 'LIBRE';
-      case 'limpieza': return 'LIMPIEZA';
-      default: return '';
+  /** Traducción del tipo */
+  getTipoHabitacion(tipo: TypesRooms): string {
+    switch (tipo) {
+      case 'normal':
+        return 'Habitación Normal';
+      case 'doble':
+        return 'Habitación Doble';
+      case 'plus':
+        return 'Habitación Plus';
+      default:
+        return tipo;
     }
   }
 
-  getTipoHabitacion(tipo: string): string {
-    const tipoLower = tipo.toLowerCase();
-    switch (tipoLower) {
-      case 'normal': return 'Habitación_Normal';
-      case 'doble': return 'Habitación_Doble';
-      case 'plus': return 'Habitación_Plus';
-      default: return tipo;
-    }
+  /** Emitir evento para editar */
+  editarRoom(room: Room): void {
+    this.editarHabitacion.emit(room);
   }
 
-  
-
- editarHabitacion() {
-  this.roomComponent.abrirFormularioRooms(this.room);
-
-} 
-  
-eliminarHabitacion(id: number) {
-  this.roomService.deleteRoom(id).subscribe(() => {
-    this.snackBar.open('Habitacion eliminada con éxito', 'Cerrar', {
-      duration: 3000,
-    });
-  });
-  
-}
+  /** Emitir evento para eliminar */
+  eliminarRoom(id: number): void {
+    if (confirm('¿Seguro que deseas eliminar esta habitación?')) {
+      this.eliminarHabitacion.emit(id);
+    }
+  }
 }

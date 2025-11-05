@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -7,222 +7,205 @@ declare global {
 }
 
 @Component({
-  standalone: true,
   selector: 'app-pago',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './pago.component.html',
   styleUrls: ['./pago.component.css']
 })
-export class PagoComponent implements AfterViewInit, OnDestroy {
-  clienteIdentifier = '';
+export class PagoComponent implements OnInit, AfterViewInit {
+  // ===================== VARIABLES PRINCIPALES =====================
   cliente: any = null;
-  total: number = 0;
-  moneda = 'USD';
+  habitacion: any = null;
+  serviciosSeleccionados: any[] = [];
+  total = 0;
   mensaje = '';
+  mostrarModal = false;
+  mensajeModal = '';
+  emailCliente: string = '';
 
-  // Solo NIT (campo obligatorio opcional según tu lógica)
   nitFactura: string = '';
-
-  // Nuevas propiedades para cálculo por noches
-  noches: number = 1;
+  moneda: string = 'USD';
+  noches: number = 0;
   precioPorNoche: number = 0;
 
-  private buttonsRendered = false;
-  private paypalButtonsInstance: any = null;
+  clienteIdentifier: string = '';
+  fechaFiltro: string = '';
+  correoValido: boolean = false;
 
-  constructor() { }
+
+  constructor(private ngZone: NgZone) { }
+
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.intentarRenderizarBoton();
   }
 
-  ngOnDestroy(): void {
+  // ===================== BUSCAR HUÉSPED =====================
+  async buscarCliente() {
     try {
-      if (this.paypalButtonsInstance && this.paypalButtonsInstance.close) {
-        this.paypalButtonsInstance.close();
+      const query: any = {};
+      if (this.clienteIdentifier) query.nombre = this.clienteIdentifier;
+      if (this.fechaFiltro) query.fecha = this.fechaFiltro;
+
+      const url = `http://localhost:8080/api/huespedes/pendientes?${new URLSearchParams(query)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (!data || data.length === 0) {
+        this.mensaje = 'No se encontraron huéspedes pendientes con esos filtros.';
+        this.cliente = null;
+        this.total = 0;
+        return;
       }
-    } catch (e) { }
+
+      const huesped = data[0];
+      this.cliente = huesped;
+      this.habitacion = huesped.habitacionAsignada;
+      this.serviciosSeleccionados = huesped.servicios || [];
+
+      // 📅 Calcular noches y total
+      const fechaInicio = new Date(huesped.fechaRegistro);
+      const fechaFin = new Date(huesped.fechaSalida);
+      this.noches = Math.max(1, Math.ceil((+fechaFin - +fechaInicio) / (1000 * 60 * 60 * 24)));
+
+      this.precioPorNoche = Number(this.habitacion?.precio) || 0;
+      const totalServicios = this.serviciosSeleccionados.reduce(
+        (acc: number, s: any) => acc + Number(s.precioFinal || s.precio || 0),
+        0
+      );
+
+      this.cliente.totalServicios = totalServicios;
+      this.total = (this.precioPorNoche * this.noches) + totalServicios;
+      this.mensaje = '';
+    } catch (err) {
+      console.error('Error al buscar cliente pendiente:', err);
+      this.mensaje = 'Ocurrió un error al buscar el cliente.';
+    }
+  }
+  verificarCorreo() {
+  const patronCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  this.correoValido = patronCorreo.test(this.emailCliente.trim());
+
+  // 🔄 Si el correo se valida correctamente, renderiza el botón
+  if (this.correoValido) {
+    setTimeout(() => this.renderizarBotonPaypal(), 300);
+  }
+}
+
+  // ===================== MODAL =====================
+  private mostrarModalConMensaje(mensaje: string) {
+    this.mensajeModal = mensaje;
+    this.mostrarModal = true;
+    setTimeout(() => (this.mostrarModal = false), 1200);
   }
 
+  // ===================== PAYPAL =====================
   private intentarRenderizarBoton() {
     const intentar = () => {
       if ((window as any).paypal) {
         this.renderizarBotonPaypal();
       } else {
-        setTimeout(intentar, 200);
+        setTimeout(intentar, 300);
       }
     };
     intentar();
   }
 
   private renderizarBotonPaypal() {
-    if (this.buttonsRendered) return;
     const paypal = (window as any).paypal;
-
-    this.paypalButtonsInstance = paypal.Buttons({
+    paypal.Buttons({
       style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
 
-      createOrder: (data: any, actions: any) => {
+      // Crear orden con validaciones
+      createOrder: async () => {
+        if (!this.emailCliente || !this.emailCliente.trim()) {
+          this.mensaje = 'Debe ingresar un correo válido antes de pagar.';
+          return Promise.reject('Correo requerido');
+        }
+
         if (!this.total || this.total <= 0) {
-          this.mensaje = 'Ingresa un monto válido antes de continuar';
+          this.mensaje = 'Monto inválido.';
           return Promise.reject('Monto inválido');
         }
 
-        // Llamada al backend para crear la orden (URL absoluta al backend)
-        // Enviamos también nitFactura para que el backend pueda guardarlo o usarlo como invoice_id
-        return fetch('http://localhost:8080/api/pagos/crear-orden', {
+        const res = await fetch('http://localhost:8080/api/pagos/crear-orden', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            total: this.total,
-            nitFactura: this.nitFactura
-          })
-        })
-          .then(res => res.json())
-          .then(data => {
-            const orderId = data?.id || data?.orderID || data?.order?.id || data?.data?.id;
-            if (!orderId) {
-              console.error('Respuesta crear-orden inesperada:', data);
-              throw new Error('No se obtuvo orderId del backend');
-            }
-            return orderId;
-          });
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ total: this.total })
+        });
+
+        const data = await res.json();
+        return data?.data?.id;
       },
 
-      onApprove: (data: any, actions: any) => {
-        this.mensaje = 'Procesando pago...';
+      // Capturar y generar factura
+      onApprove: async (data: any) => {
+        try {
+          this.mensaje = 'Procesando pago...';
 
-        return fetch('http://localhost:8080/api/pagos/capturar-orden', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            orderId: data.orderID,
-            idHuesped: this.cliente?.idHuesped  // 👈 enviamos el huésped actual
-          })
-        })
-
-          .then(res => res.json())
-          .then(result => {
-            console.log('Resultado captura:', result);
-            this.mensaje = 'Pago capturado y registrado correctamente';
-          })
-          .catch((error: any) => {
-            console.error('Error al capturar en backend:', error);
-            this.mensaje = 'Error al capturar el pago. Revisa la consola.';
+          const cap = await fetch('http://localhost:8080/api/pagos/capturar-orden', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              orderId: data.orderID,
+              idHuesped: this.cliente.idHuesped
+            })
           });
+
+          const capJson = await cap.json();
+          if (!capJson) throw new Error('No se pudo capturar la orden');
+
+          // Generar factura usando el correo manual
+          try {
+            const fac = await fetch('http://localhost:8080/api/facturas/generar', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                cliente: {
+                  nombre: this.cliente.nameHuesped,
+                  apellido: this.cliente.apellidoHuesped,
+                  telefono: this.cliente.telefono,
+                  email: this.emailCliente.trim(), // 👈 correo manual
+                },
+                habitacion: this.habitacion,
+                serviciosSeleccionados: this.serviciosSeleccionados,
+                total: this.total,
+                pago: 'PayPal'
+              })
+            });
+
+            const facJson = await fac.json();
+            this.mostrarModalConMensaje(
+              facJson?.ok
+                ? `✅ Factura enviada al correo ${this.emailCliente.trim()}`
+                : 'Pago realizado, pero hubo un problema al generar/enviar la factura.'
+            );
+          } catch (err) {
+            console.error('Error al generar factura:', err);
+            this.mostrarModalConMensaje('Pago realizado, pero hubo un problema al generar la factura.');
+          }
+
+          // Redirección final
+          setTimeout(() => {
+            this.ngZone.run(() => {
+              window.location.href = 'http://localhost:4200/SACH/habitaciones';
+            });
+          }, 3500);
+        } catch (err) {
+          console.error(err);
+          this.mensaje = 'Error en PayPal';
+          this.ngZone.run(() => {
+            window.location.href = 'http://localhost:4200/SACH/habitaciones';
+          });
+        }
       },
 
       onError: (err: any) => {
-        console.error('PayPal Buttons Error', err);
-        this.mensaje = 'Error en PayPal: ' + (err?.message || err);
-      },
-
-      onCancel: (data: any) => {
-        this.mensaje = 'Pago cancelado por el usuario';
+        console.error(err);
+        this.mensaje = 'Error en PayPal';
       }
-    });
-
-    this.paypalButtonsInstance.render('#paypal-button-container');
-    this.buttonsRendered = true;
-  }
-
-  // Búsqueda por nameHuesped (normalizada con la estructura real del backend)
-  buscarCliente() {
-    if (!this.clienteIdentifier) {
-      this.mensaje = 'Ingresa el nombre del cliente';
-      return;
-    }
-
-    fetch('http://localhost:8080/api/huespedes', {
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Error al obtener huéspedes');
-        return res.json();
-      })
-      .then((data: any) => {
-        const lista: any[] = Array.isArray(data) ? data : (data?.data && Array.isArray(data.data) ? data.data : []);
-
-        const q = this.clienteIdentifier.trim().toLowerCase();
-
-        const encontrado = lista.find(h => {
-          const nombre = (h.nameHuesped || h.name || h.nombre || '').toString().toLowerCase();
-          const apellido = (h.apellidoHuesped || h.apellido || '').toString().toLowerCase();
-          const full = `${nombre} ${apellido}`.trim();
-          return nombre.includes(q) || apellido.includes(q) || full.includes(q);
-        });
-
-        if (encontrado) {
-          this.cliente = encontrado;
-
-          // 🔒 Verificar si el cliente ya está cancelado
-          if (encontrado.statusHuesped?.toLowerCase() === 'cancelado') {
-            this.mensaje = 'Este cliente ya completó su pago y no puede volver a pagar.';
-            this.cliente = null;
-            this.total = 0;
-            this.precioPorNoche = 0;
-            this.noches = 1;
-            return;
-          }
-
-          // calcular noches a partir de fechas (fallback seguro)
-          const fechaInicioStr = encontrado.fechaRegistro;
-          const fechaSalidaStr = encontrado.fechaSalida;
-
-          this.noches = 1;
-          if (fechaInicioStr && fechaSalidaStr) {
-            try {
-              const start = new Date(fechaInicioStr);
-              const end = new Date(fechaSalidaStr);
-              const msPerDay = 24 * 60 * 60 * 1000;
-
-              // usar horas UTC para evitar problemas de timezone
-              const utcStart = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
-              const utcEnd = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
-              const diffDays = Math.floor((utcEnd - utcStart) / msPerDay);
-              this.noches = Math.max(1, diffDays);
-            } catch (e) {
-              this.noches = 1;
-            }
-          }
-
-          // determinar precio por noche (preferir habitacionAsignada.precio)
-          const precioHabitacion = encontrado.habitacionAsignada?.precio ?? null;
-          if (precioHabitacion !== null && precioHabitacion !== undefined) {
-            this.precioPorNoche = parseFloat(precioHabitacion) || 0;
-          } else if (encontrado.monto !== undefined && encontrado.monto !== null) {
-            // si no hay precio por noche, intentamos inferir (monto puede ser total o por noche;
-            // asumimos que 'monto' podría ser precio por noche en tu modelo actual)
-            this.precioPorNoche = parseFloat(encontrado.monto) || 0;
-          } else {
-            this.precioPorNoche = 0;
-          }
-
-          // finalmente calculamos el total por noches
-          this.total = +(this.precioPorNoche * this.noches);
-
-          this.mensaje = '';
-        } else {
-          this.cliente = null;
-          this.noches = 1;
-          this.precioPorNoche = 0;
-          this.mensaje = 'No se encontró cliente por ese nombre';
-        }
-      })
-      .catch((error: any) => {
-        console.error('Error buscando huéspedes:', error);
-        this.cliente = null;
-        this.noches = 1;
-        this.precioPorNoche = 0;
-        this.mensaje = 'No se encontró cliente o hubo error';
-      });
+    }).render('#paypal-button-container');
   }
 }
-
-
-
-

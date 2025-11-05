@@ -1,5 +1,12 @@
 <div class="reservar-container">
-  <h2 class="titulo">🏨 Habitaciones disponibles</h2>
+  <div class="header">
+  <button class="logout-btn" (click)="cerrarSesion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+  </button>
+</div>
+  <h2 class="titulo">
+    <i class="fa-solid fa-hotel"></i> Habitaciones Disponibles
+  </h2>
 
   <div *ngIf="isLoading" class="loading">Cargando habitaciones...</div>
 
@@ -7,31 +14,41 @@
     {{ customMessage || 'No hay habitaciones registradas' }}
   </div>
 
-
   <div class="grid-habitaciones" *ngIf="rooms.length > 0">
     <div class="room-card" *ngFor="let room of rooms">
-      <div class="room-header">
-        <h3>{{ room.habitacion | titlecase }}</h3>
-        <span class="nivel">{{ room.nivel }}</span>
+      <!-- Imagen -->
+      <div class="image-container">
+        <img
+          [src]="
+            room.image_url && room.image_url.trim() !== ''
+              ? room.image_url
+              : 'https://res.cloudinary.com/dy7wfku3s/image/upload/v1762236405/WhatsApp_Image_2025-11-03_at_6.04.22_PM_ok0q7n.jpg'
+          "
+          alt="Imagen habitación"
+        />
+        <span class="estado" [ngClass]="room.estado">{{ room.estado | uppercase }}</span>
       </div>
 
-      <p><strong>ID:</strong> {{ room.id_Rooms }}</p>
-      <p>
-        <strong>Estado:</strong>
-        <span [class]="room.estado === 'libre' ? 'estado-libre' : 'estado-ocupada'">
-          {{ room.estado }}
-        </span>
-      </p>
-      <p><strong>Precio:</strong> Q {{ room.precio }}</p>
-
-      <div class="boton-reservar">
-        <button [disabled]="room.estado !== 'libre'" [routerLink]="['/reservar', room.id_Rooms]">
-          {{ room.estado === 'libre' ? 'Reservar' : 'No disponible' }}
-        </button>
+      <!-- Información -->
+      <div class="room-info">
+        <h2 class="room-number">{{ room.id_Rooms }}</h2>
+        <h3 class="room-type">Habitación {{ room.habitacion | titlecase }}</h3>
+        <span class="room-level">Nivel {{ room.nivel.replace('N', '') }}</span>
+        <p class="room-price">Q{{ room.precio.toFixed(2) }}</p>
       </div>
+
+      <!-- Botón -->
+      <button
+        class="btn-reservar"
+        [disabled]="room.estado !== 'libre'"
+        [routerLink]="['/reservar', room.id_Rooms]"
+      >
+        <i class="fa-solid fa-calendar-check"></i> Reservar ahora
+      </button>
     </div>
   </div>
 
+  <!-- Botones de filtro -->
   <div class="filter-buttons">
     <button (click)="cargarTodas()">Todas las habitaciones</button>
     <button (click)="filtrarPorNivel('N1')">Nivel 1</button>
