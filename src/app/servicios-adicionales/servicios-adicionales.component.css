@@ -1,0 +1,583 @@
+
+
+/* ==================== CONTENEDOR DE SERVICIOS ==================== */
+.servicios-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.servicio-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.servicio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.servicio-imagen {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 2px solid #caa21c; /* Dorado */
+}
+
+.servicio-info {
+  padding: 15px;
+}
+
+.servicio-info h3 {
+  font-size: 1.2rem;
+  color: #0c2340; /* Azul */
+  margin-bottom: 10px;
+}
+
+.servicio-info p {
+  color: #444;
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.precio {
+  color: #caa21c; /* Dorado */
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* ==================== BOTONES EN LAS TARJETAS ==================== */
+.servicio-botones {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+}
+
+.btn-editar, .btn-eliminar {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-editar {
+  background: #caa21c;
+  color: #fff;
+}
+
+.btn-editar:hover {
+  background: #b8860b;
+  transform: translateY(-2px);
+}
+
+.btn-eliminar {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-eliminar:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* ==================== ESTILOS DEL MODAL ==================== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  width: 90%;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #caa21c; /* Dorado */
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  color: #0c2340; /* Azul */
+  font-weight: 700;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.btn-guardar, .btn-cancelar {
+  padding: 12px 20px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-guardar {
+  background: #0c2340; /* Azul */
+  color: white;
+}
+
+.btn-guardar:hover {
+  background: #caa21c;
+  color: #0c2340;
+}
+
+.btn-cancelar {
+  background: #ccc;
+  color: #333;
+}
+
+.btn-cancelar:hover {
+  background: #bbb;
+}
+
+/* ==================== ANIMACIONES ==================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.servicios-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 20px;
+}
+
+.servicio-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.servicio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.servicio-imagen {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.servicio-info {
+  padding: 1rem;
+}
+
+.servicio-info h3 {
+  color: #0c2340;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.servicio-info p {
+  color: #444;
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+}
+
+.precio {
+  font-weight: 600;
+  color: #0c2340;
+}
+
+button {
+  background: #caa21c;
+  color: white;
+  font-size: 0.9rem;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0c2340;
+  color: #fff;
+}
+
+/* Modal y otros estilos de botones */
+.modal-botones button {
+  background: #caa21c;
+  color: #fff;
+}
+
+/* Modal */
+.modal-content {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Header del Modal */
+.modal-content h2 {
+  color: #0c2340;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Estilo para el formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Estilo para los inputs */
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #dcdcdc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #caa21c;
+  box-shadow: 0 0 5px rgba(202, 162, 28, 0.3);
+}
+
+/* Estilo para el small debajo de la imagen */
+small {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Botones dentro del modal */
+.modal-botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-botones button {
+  width: 48%;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-guardar {
+  background-color: #caa21c;
+  color: white;
+}
+
+.btn-guardar:hover {
+  background-color: #b8860b;
+}
+
+.btn-cancelar {
+  background-color: #f0f0f0;
+  color: #0c2340;
+  border: 2px solid #dcdcdc;
+}
+
+.btn-cancelar:hover {
+  background-color: #e2e2e2;
+  border-color: #caa21c;
+  color: #caa21c;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Ajustes de imagen */
+.servicio-imagen {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Títulos */
+h3 {
+  font-size: 1.2rem;
+  color: #0c2340;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+/* ==================== SERVICIOS ==================== */
+.servicios-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.servicio-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  transition: transform 0.3s ease;
+}
+
+.servicio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.servicio-imagen {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.servicio-info {
+  padding: 15px;
+  text-align: center;
+}
+
+.servicio-info h3 {
+  color: #0c2340;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.servicio-info p {
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.precio {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* ==================== MODAL ==================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-guardar,
+.btn-cancelar {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-guardar {
+  background-color: #caa21c;
+  color: #fff;
+}
+
+.btn-guardar:hover {
+  background-color: #b8860b;
+}
+
+.btn-cancelar {
+  background-color: #e2e2e2;
+  color: #333;
+}
+
+.btn-cancelar:hover {
+  background-color: #bbb;
+}
+/* ==================== SERVICIOS ==================== */
+.servicios-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.servicio-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  transition: transform 0.3s ease;
+}
+
+.servicio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.servicio-imagen {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.servicio-info {
+  padding: 15px;
+  text-align: center;
+}
+
+.servicio-info h3 {
+  color: #0c2340;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.servicio-info p {
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.precio {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* ==================== MODAL ==================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-guardar,
+.btn-cancelar {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-guardar {
+  background-color: #caa21c;
+  color: #fff;
+}
+
+.btn-guardar:hover {
+  background-color: #b8860b;
+}
+
+.btn-cancelar {
+  background-color: #e2e2e2;
+  color: #333;
+}
+
+.btn-cancelar:hover {
+  background-color: #bbb;
+}
+

@@ -243,4 +243,12 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
       }
     }).render('#paypal-button-container');
   }
+
+  // En tu ts
+regresar() {
+  // Guardar los datos del cliente en el localStorage para preservarlos
+  localStorage.setItem('cliente', JSON.stringify(this.cliente));
+  this.router.navigate(['reservar/:id']);
+}
+
 }

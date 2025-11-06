@@ -109,6 +109,8 @@ export class HabitacionDetalleComponent implements OnInit {
     }
   }
 
+  
+
   actualizarFechaSalida() {
     if (this.cliente.fechaInicio) {
       const entrada = new Date(this.cliente.fechaInicio);

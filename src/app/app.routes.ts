@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth/auth.guard';
 import { HomeSectionComponent } from './home-section/home-section.component';
+import { ServiciosAdicionalesComponent } from './servicios-adicionales/servicios-adicionales.component';  // Importa el componente de servicios adicionales
 
 export const routes: Routes = [
   {
@@ -23,12 +24,10 @@ export const routes: Routes = [
         .then(m => m.PagoReservaComponent)
   },
 
-
   {
     path: '',
     loadComponent: () => import('./login/login.component').then(c => c.LoginComponent),
     pathMatch: 'full',
-
   },
   {
     path: 'GuardarReporte',
@@ -37,7 +36,6 @@ export const routes: Routes = [
   },
 
   {
-
     path: 'SACH',
     loadComponent: () => import('./home-section/home-section.component').then(c => c.HomeSectionComponent),
     canActivate: [authGuard],
@@ -45,7 +43,7 @@ export const routes: Routes = [
       {
         path: 'users',
         loadComponent: () => import('./Users/usersList/usersList.component').then(c => c.UserHistoryComponent),
-        data: { requiredRole: 'admin', title: 'Gestion de Usuarios' }//
+        data: { requiredRole: 'admin', title: 'Gestion de Usuarios' }
       },
       {
         path: 'habitaciones',
@@ -56,8 +54,7 @@ export const routes: Routes = [
         path: 'huesped',
         loadComponent: () => import('./Huesped/huesped/huesped.component').then(c => c.HuespedComponent),
         data: { title: 'Gestión de Huéspedes', requiredRole: ['admin', 'user'] }
-      }
-      ,
+      },
       {
         path: 'RegistroHuesped/:id',
         loadComponent: () => import('./reservacion/reservacion.component').then(c => c.ReservacionComponent),
@@ -67,6 +64,12 @@ export const routes: Routes = [
         path: 'pago',
         loadComponent: () => import('./pago/pago.component').then(c => c.PagoComponent),
         data: { title: 'Pago con PayPal' }
+      },
+      // Ruta añadida para Servicios Adicionales
+      {
+        path: 'servicios-adicionales',
+        component: ServiciosAdicionalesComponent,  // Aquí se carga el componente que muestra los servicios adicionales
+        data: { title: 'Servicios Adicionales', requiredRole: 'admin' }  // Solo accesible para administradores
       }
     ]
   },
@@ -75,5 +78,4 @@ export const routes: Routes = [
     path: '**',
     redirectTo: ''
   }
-
 ];

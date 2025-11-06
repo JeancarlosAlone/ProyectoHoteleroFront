@@ -1,0 +1,46 @@
+<!-- Servicios Adicionales -->
+<div class="servicios-container">
+  <div class="servicio" *ngFor="let servicio of servicios">
+    <div class="servicio-card">
+      <img [src]="servicio.imagen" alt="{{ servicio.nombre }}" class="servicio-imagen">
+      <div class="servicio-info">
+        <h3>{{ servicio.nombre }}</h3>
+        <p>{{ servicio.descripcion }}</p>
+        <p class="precio">Q{{ servicio.precio }}</p>
+      </div>
+      <div class="servicio-botones">
+        <button class="btn-editar" (click)="abrirModal(servicio)">Editar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para editar servicio -->
+<div class="modal" *ngIf="modalVisible">
+  <div class="modal-content">
+    <span class="close" (click)="cerrarModal()">×</span>
+    <h2>Editar Servicio</h2>
+    <form (ngSubmit)="guardarCambios()">
+      <div>
+        <label>Nombre:</label>
+        <input type="text" [(ngModel)]="servicioSeleccionado.nombre" name="nombre" required>
+      </div>
+      <div>
+        <label>Descripción:</label>
+        <input type="text" [(ngModel)]="servicioSeleccionado.descripcion" name="descripcion" required>
+      </div>
+      <div>
+        <label>Precio:</label>
+        <input type="number" [(ngModel)]="servicioSeleccionado.precio" name="precio" required>
+      </div>
+      <div>
+        <label>Imagen (subir):</label>
+        <input type="file" (change)="onFileSelected($event)" name="imagen" required>
+      </div>
+      <div class="modal-botones">
+        <button class="btn-guardar" type="submit">Guardar</button>
+        <button class="btn-cancelar" type="button" (click)="cerrarModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

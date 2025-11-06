@@ -116,7 +116,7 @@ input[type="email"],
 input[type="tel"],
 input[type="number"],
 input[type="date"] {
-  width: 100%;
+  width: 95%;
   padding: 10px 15px;
   border: 1px solid #c9d1e0;
   border-radius: 8px;

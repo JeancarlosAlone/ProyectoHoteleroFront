@@ -4,9 +4,10 @@
     <button routerLink="/GuardarReporte">Imprimir Reporte</button>
     <button routerLink="/SACH/huesped">Gestión de Huéspedes</button>
     <button routerLink="/SACH/pago">Pago con PayPal</button>
+    <button routerLink="/SACH/servicios-adicionales">Servicios Adicionales</button> <!-- Nueva pestaña -->
     @if (admin) {
-      <button (click)="abrirFormularioRooms(null)">Nueva Habitación</button>
-      <button routerLink="/SACH/users">Control de Usuarios</button>
+    <button (click)="abrirFormularioRooms(null)">Nueva Habitación</button>
+    <button routerLink="/SACH/users">Control de Usuarios</button>
     }
   </div>
 
@@ -14,28 +15,16 @@
   <div class="main-content">
     <!-- Barra de búsqueda -->
     <div class="search-bar">
-      <input
-        type="number"
-        maxlength="3"
-        placeholder="Buscar por ID de habitación"
-        [(ngModel)]="idBusqueda"
-        (input)="buscarHabitacionPorId()"
-      />
+      <input type="number" maxlength="3" placeholder="Buscar por ID de habitación" [(ngModel)]="idBusqueda"
+        (input)="buscarHabitacionPorId()" />
     </div>
 
     <!-- Contenedor de habitaciones -->
     <div class="roomContainer">
-      <div
-        class="grid-habitaciones"
-        *ngIf="(rooms?.length ?? 0) > 0; else sinHabitaciones"
-      >
+      <div class="grid-habitaciones" *ngIf="rooms.length > 0; else sinHabitaciones">
         @for (room of rooms; track room.id_Rooms) {
-          <app-roomcard
-            [room]="room"
-            [admin]="admin"
-            (editarHabitacion)="abrirFormularioRooms($event)"
-            (eliminarHabitacion)="eliminarHabitacion($event)"
-          />
+        <app-roomcard [room]="room" [admin]="admin" (editarHabitacion)="abrirFormularioRooms($event)"
+          (eliminarHabitacion)="eliminarHabitacion($event)" />
         }
       </div>
 
