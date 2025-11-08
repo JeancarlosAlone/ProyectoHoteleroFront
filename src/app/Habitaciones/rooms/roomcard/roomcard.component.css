@@ -164,3 +164,59 @@
 .btn-cerrar:hover {
   background: linear-gradient(90deg, #ffd700, #a67c00);
 }
+
+/* ======== ESTADOS VISUALES ======== */
+.estado-libre {
+  background: #28a745; /* verde */
+  color: #fff;
+  border: 2px solid #1e7e34;
+}
+
+.estado-ocupada {
+  background: #dc3545; /* rojo */
+  color: #fff;
+  border: 2px solid #a71d2a;
+}
+
+.estado-desconocido {
+  background: #ffc107; /* amarillo de advertencia */
+  color: #000;
+  border: 2px solid #d39e00;
+}
+
+/* === FIX MODAL SOBRE TARJETAS === */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* 👈 fuerza a estar arriba de todo */
+}
+
+.modal-ocupada {
+  position: relative;
+  z-index: 10000; /* 👈 el contenido del modal sobre el fondo oscuro */
+  background: #fffdf5;
+  border: 2px solid #a67c00;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+  animation: aparecerModal 0.3s ease-in-out;
+}
+
+/* Animación opcional */
+@keyframes aparecerModal {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

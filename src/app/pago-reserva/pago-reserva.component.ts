@@ -138,10 +138,10 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
 
     this.total = (((precioBase * noches) + totalServicios)/7.74).toFixed(2) as unknown as number;
     this.totalqutzales = ((precioBase * noches) + totalServicios).toFixed(2) as unknown as number;  
-    console.log('📅 Noches:', noches);
-    console.log('🏨 Precio base habitación:', precioBase);
-    console.log('🧾 Total servicios adicionales:', totalServicios);
-    console.log('💰 Total general:', this.total);
+    console.log('Noches:', noches);
+    console.log('Precio base habitación:', precioBase);
+    console.log('Total servicios adicionales:', totalServicios);
+    console.log('Total general:', this.total);
 
     this.mensaje = '';
   }
@@ -181,7 +181,7 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
         const res = await fetch('http://localhost:8080/api/pagos/crear-orden', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ total: this.total })
+body: JSON.stringify({ total: Number(this.calcularTotalGeneralUSD()), currency: 'USD' })
         });
 
         const data = await res.json();
@@ -264,5 +264,50 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
     }
 
   }
+
+  precioPaypal(preciohabitacion: any) {
+      // Actualiza precioFinal de los servicios y calcula el total
+      let totalServicios = 0;
+      this.serviciosSeleccionados.forEach(servicio => {
+      
+        if (servicio.seleccionado) {
+          totalServicios += Number((servicio.precioFinal||servicio.precio||0 ));
+        }
+      });
+      const precioHabitacionUSD = Number((preciohabitacion ));
+      const { fechaInicio, fechaFin } = this.cliente;
+      const inicio = new Date(fechaInicio);
+      let noches = 1;
+        const fin = new Date(fechaFin);
+        const diffMs = fin.getTime() - inicio.getTime();
+        noches = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+       
+      return ((precioHabitacionUSD* noches + totalServicios)/7.74).toFixed(2);  ;
+    }
+
+      calcularTotalServicios(): number {
+  return this.serviciosSeleccionados.reduce((acc, s) => acc + (s.precioFinal || s.precio || 0), 0);
+}
+
+calcularTotalUSD(): string {
+  const totalQ = this.calcularTotalServicios();
+  return (totalQ / 7.74).toFixed(2);
+}
+
+calcularTotalGeneralUSD(): string {
+  const totalHabitacion = Number(this.precioPaypal(this.habitacion?.precio)) || 0;
+  const totalServicios = Number(this.calcularTotalUSD()) || 0;
+
+  const total = totalHabitacion + totalServicios;
+  return total.toFixed(2);
+}
+
+calcularTotalQuetzales(): number {
+  const precioHabitacion = this.habitacion?.precio || 0;
+  const totalServicios = this.calcularTotalServicios();
+ const total = ((precioHabitacion * 7.74) + totalServicios).toFixed(2);
+  return parseFloat (total);
+}
+
 
 }

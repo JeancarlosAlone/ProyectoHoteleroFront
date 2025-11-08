@@ -103,3 +103,93 @@ h2 {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
+ /* ==================== SERVICIOS SELECCIONADOS ==================== */
+.servicios-seleccionados {
+  background: #fff;
+  border: 2px solid #a67c00;
+  border-radius: 15px;
+  padding: 1.5rem 2rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 15px rgba(166, 124, 0, 0.25);
+}
+
+.servicios-seleccionados h4 {
+  color: #000;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid #a67c00;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.lista-servicios {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.servicio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0e6c0;
+}
+
+.servicio-item:last-child {
+  border-bottom: none;
+}
+
+.nombre {
+  font-weight: 600;
+  color: #000;
+}
+
+.precios {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tachado {
+  text-decoration: line-through;
+  color: #b0b0b0;
+  font-size: 0.95rem;
+}
+
+.precio-final {
+  color: #a67c00;
+  font-weight: 700;
+}
+
+.precio-normal {
+  color: #000;
+  font-weight: 600;
+}
+
+.etiqueta-descuento {
+  background: #a67c00;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.totales-servicios {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 2px solid #a67c00;
+}
+
+.totales-servicios p {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.totales-servicios strong {
+  color: #a67c00;
+}

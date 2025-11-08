@@ -1,404 +1,586 @@
-/* ==================== ESTRUCTURA GENERAL ==================== */
-.detalle-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 3rem 2rem;
-  background: linear-gradient(180deg, #faf7e8 0%, #fffaf0 50%, #f9efc6 100%);
-  color: #000;
-  font-family: "Poppins", sans-serif;
-  min-height: 100vh;
-}
+  /* ==================== ESTRUCTURA GENERAL ==================== */
+  .detalle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(180deg, #faf7e8 0%, #fffaf0 50%, #f9efc6 100%);
+    color: #000;
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+  }
 
-/* ==================== BLOQUES PRINCIPALES ==================== */
-.bloques-inferiores {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-  width: 100%;
-  max-width: 1300px;
-}
+  /* ==================== BLOQUES PRINCIPALES ==================== */
+  .bloques-inferiores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    width: 100%;
+    max-width: 1300px;
+  }
 
-.bloque {
-  background: #fffdf5;
-  border-radius: 20px;
-  padding: 2rem 2.2rem;
-  box-shadow: 0 6px 25px rgba(166, 124, 0, 0.2);
-  flex: 1 1 480px;
-  border: 1px solid #d8c98f;
-  transition: 0.3s ease;
-}
+  .bloque {
+    background: #fffdf5;
+    border-radius: 20px;
+    padding: 2rem 2.2rem;
+    box-shadow: 0 6px 25px rgba(166, 124, 0, 0.2);
+    flex: 1 1 480px;
+    border: 1px solid #d8c98f;
+    transition: 0.3s ease;
+  }
 
-.bloque:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 35px rgba(166, 124, 0, 0.3);
-}
+  .bloque:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 35px rgba(166, 124, 0, 0.3);
+  }
 
-/* ==================== IMAGEN PRINCIPAL ==================== */
-.image-wrapper {
-  width: 100%;
-  max-width: 1200px;
-  border-radius: 25px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  border: 3px solid #a67c00;
-}
+  /* ==================== IMAGEN PRINCIPAL ==================== */
+  .image-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    border: 3px solid #a67c00;
+  }
 
-.room-image {
-  width: 100%;
-  height: 450px;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
+  .room-image {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
 
-.room-image:hover {
-  transform: scale(1.05);
-}
+  .room-image:hover {
+    transform: scale(1.05);
+  }
 
-/* ==================== TÍTULOS ==================== */
-h3 {
-  color: #000;
-  font-weight: 700;
-  border-bottom: 3px solid #a67c00;
-  display: inline-block;
-  padding-bottom: 5px;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
+  /* ==================== TÍTULOS ==================== */
+  h3 {
+    color: #000;
+    font-weight: 700;
+    border-bottom: 3px solid #a67c00;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-/* ==================== INPUTS Y VALIDACIÓN ==================== */
-input {
-  width: 95%;
-  padding: 0.8rem 1rem;
-  border: 1.8px solid #d8c98f;
-  border-radius: 10px;
-  background: #fffdf6;
-  margin-bottom: 1rem;
-  transition: all 0.3s ease;
-}
+  /* ==================== INPUTS Y VALIDACIÓN ==================== */
+  input {
+    width: 95%;
+    padding: 0.8rem 1rem;
+    border: 1.8px solid #d8c98f;
+    border-radius: 10px;
+    background: #fffdf6;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
 
-input:focus {
-  outline: none;
-  border-color: #a67c00;
-  box-shadow: 0 0 10px rgba(166, 124, 0, 0.3);
-}
+  input:focus {
+    outline: none;
+    border-color: #a67c00;
+    box-shadow: 0 0 10px rgba(166, 124, 0, 0.3);
+  }
 
-/* Campos obligatorios en error */
-input.ng-invalid.ng-touched {
-  border: 2px solid #b71c1c !important;
-  background: #fff5f5 !important;
-}
+  /* Campos obligatorios en error */
+  input.ng-invalid.ng-touched {
+    border: 2px solid #b71c1c !important;
+    background: #fff5f5 !important;
+  }
 
-.mensaje-error {
-  color: #b71c1c;
-  background: #fff3f3;
-  border-left: 4px solid #b71c1c;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-}
+  .mensaje-error {
+    color: #b71c1c;
+    background: #fff3f3;
+    border-left: 4px solid #b71c1c;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
 
-/* ==================== BOTONES ==================== */
-button {
-  border: none;
-  border-radius: 10px;
-  font-weight: 700;
-  padding: 12px;
-  cursor: pointer;
-  transition: 0.3s;
-}
+  /* ==================== BOTONES ==================== */
+  button {
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
 
-.btn-limpiar {
-  background: #f8f8f8;
-  color: #000;
-  border: 1px solid #a67c00;
-}
+  .btn-limpiar {
+    background: #f8f8f8;
+    color: #000;
+    border: 1px solid #a67c00;
+  }
 
-.btn-limpiar:hover {
-  background: #a67c00;
-  color: white;
-}
+  .btn-limpiar:hover {
+    background: #a67c00;
+    color: white;
+  }
 
-/* Botón de servicios */
-.btn-servicios {
-  background: linear-gradient(90deg, #fffdf5, #fff2c0);
-  color: #a67c00;
+  /* Botón de servicios */
+  .btn-servicios {
+    background: linear-gradient(90deg, #fffdf5, #fff2c0);
+    color: #a67c00;
+    border: 2px solid #a67c00;
+  }
+
+  .btn-servicios:hover {
+    background: #a67c00;
+    color: #fff;
+  }
+
+  /* Confirmar sin pago */
+  .btn-reservar-sin-pago {
+    background: #fffdf5;
+    border: 2px solid #000;
+    color: #000;
+  }
+
+  .btn-reservar-sin-pago:hover {
+    background: #000;
+    color: #ffd700;
+  }
+
+  /* Pagar reserva */
+  .btn-pago {
+    background: linear-gradient(90deg, #000, #a67c00);
+    color: #fff;
+  }
+
+  .btn-pago:hover {
+    background: linear-gradient(90deg, #a67c00, #000);
+    transform: scale(1.05);
+  }
+
+  /* ==================== MODAL PREMIUM DE SERVICIOS ==================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    animation: fadeIn 0.4s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .modal-servicios {
+    background: #fffdf5;
+    width: 95%;
+    max-width: 1300px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 25px;
+    border: 2px solid #a67c00;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.35);
+    padding: 2.5rem 3rem;
+    animation: slideIn 0.5s ease;
+  }
+
+  /* Encabezado del modal */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #a67c00;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-header h3 {
+    color: #000;
+    font-weight: 800;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+  }
+
+  .close-btn {
+    background: #a67c00;
+    color: #fff;
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(166, 124, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .close-btn:hover {
+    background: #000;
+    color: #ffd700;
+    transform: scale(1.1);
+  }
+
+
+  /* ==================== AGRUPACIÓN POR CATEGORÍAS ==================== */
+  .categoria-servicio {
+    margin-bottom: 2rem;
+  }
+
+  .categoria-servicio h4 {
+    background: linear-gradient(90deg, #a67c00, #ffd700);
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(166, 124, 0, 0.25);
+  }
+
+  /* ==================== TARJETAS DE SERVICIO ==================== */
+  .servicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .servicio-card {
+    background: #fffef9;
+    border: 1px solid #e6dca8;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(166, 124, 0, 0.2);
+    transition: 0.3s;
+  }
+
+  .servicio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(166, 124, 0, 0.3);
+  }
+
+  .servicio-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+
+  .servicio-info {
+    padding: 1rem 1.2rem;
+  }
+
+  .servicio-info h4 {
+    color: #000;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .precio-con-descuento {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: #a67c00;
+  }
+
+  .precio-original {
+    text-decoration: line-through;
+    color: #888;
+  }
+
+  .badge-descuento {
+    background: #a67c00;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+
+  .check-servicio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+
+  .check-servicio input {
+    accent-color: #a67c00;
+  }
+
+  .check-servicio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.8rem;
+    background: #fffaf0;
+    border: 1.5px solid #d8c98f;
+    border-radius: 8px;
+    padding: 6px 12px;
+    transition: all 0.3s ease;
+  }
+
+  .check-servicio:hover {
+    background: #fff4cc;
+    border-color: #a67c00;
+    box-shadow: 0 3px 10px rgba(166, 124, 0, 0.25);
+  }
+
+  .check-servicio span {
+    color: #000;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .check-servicio input {
+    accent-color: #a67c00;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+
+  /* ==================== BOTONES DEL MODAL ==================== */
+  .modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn-guardar {
+    background: linear-gradient(90deg, #a67c00, #000);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 22px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn-guardar:hover {
+    background: linear-gradient(90deg, #000, #a67c00);
+    transform: scale(1.05);
+  }
+
+  .btn-cerrar {
+    background: #fff;
+    color: #a67c00;
+    border: 2px solid #a67c00;
+    border-radius: 10px;
+    padding: 12px 22px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .btn-cerrar:hover {
+    background: #a67c00;
+    color: #fff;
+  }
+
+  /* ==================== ANIMACIONES ==================== */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+  @media (max-width: 900px) {
+    .modal-servicios {
+      width: 95%;
+      padding: 2rem;
+    }
+
+    .servicios-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ==================== SERVICIOS SELECCIONADOS ==================== */
+.servicios-seleccionados {
+  background: #fff;
   border: 2px solid #a67c00;
-}
-
-.btn-servicios:hover {
-  background: #a67c00;
-  color: #fff;
-}
-
-/* Confirmar sin pago */
-.btn-reservar-sin-pago {
-  background: #fffdf5;
-  border: 2px solid #000;
-  color: #000;
-}
-
-.btn-reservar-sin-pago:hover {
-  background: #000;
-  color: #ffd700;
-}
-
-/* Pagar reserva */
-.btn-pago {
-  background: linear-gradient(90deg, #000, #a67c00);
-  color: #fff;
-}
-
-.btn-pago:hover {
-  background: linear-gradient(90deg, #a67c00, #000);
-  transform: scale(1.05);
-}
-
-/* ==================== MODAL PREMIUM DE SERVICIOS ==================== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3000;
-  animation: fadeIn 0.4s ease;
-  backdrop-filter: blur(5px);
-}
-
-.modal-servicios {
-  background: #fffdf5;
-  width: 95%;
-  max-width: 1300px;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 25px;
-  border: 2px solid #a67c00;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.35);
-  padding: 2.5rem 3rem;
-  animation: slideIn 0.5s ease;
-}
-
-/* Encabezado del modal */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 3px solid #a67c00;
-  margin-bottom: 1.5rem;
-}
-
-.modal-header h3 {
-  color: #000;
-  font-weight: 800;
-  font-size: 1.8rem;
-  text-transform: uppercase;
-}
-
-.close-btn {
-  background: #a67c00;
-  color: #fff;
-  font-size: 1.4rem;
-  border: none;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(166, 124, 0, 0.3);
-  transition: all 0.3s ease;
-}
-
-.close-btn:hover {
-  background: #000;
-  color: #ffd700;
-  transform: scale(1.1);
-}
-
-
-/* ==================== AGRUPACIÓN POR CATEGORÍAS ==================== */
-.categoria-servicio {
-  margin-bottom: 2rem;
-}
-
-.categoria-servicio h4 {
-  background: linear-gradient(90deg, #a67c00, #ffd700);
-  color: #000;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
+  border-radius: 15px;
+  padding: 1.5rem 2rem;
+  margin-top: 1.5rem;
   box-shadow: 0 4px 15px rgba(166, 124, 0, 0.25);
 }
 
-/* ==================== TARJETAS DE SERVICIO ==================== */
-.servicios-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.servicio-card {
-  background: #fffef9;
-  border: 1px solid #e6dca8;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(166, 124, 0, 0.2);
-  transition: 0.3s;
-}
-
-.servicio-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(166, 124, 0, 0.3);
-}
-
-.servicio-img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-}
-
-.servicio-info {
-  padding: 1rem 1.2rem;
-}
-
-.servicio-info h4 {
+.servicios-seleccionados h4 {
   color: #000;
   font-weight: 700;
-  margin-bottom: 0.3rem;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid #a67c00;
+  display: inline-block;
+  padding-bottom: 4px;
 }
 
-.precio-con-descuento {
+.lista-servicios {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.servicio-item {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  color: #a67c00;
-}
-
-.precio-original {
-  text-decoration: line-through;
-  color: #888;
-}
-
-.badge-descuento {
-  background: #a67c00;
-  color: #fff;
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-}
-
-.check-servicio {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 0.5rem;
-  cursor: pointer;
-}
-
-.check-servicio input {
-  accent-color: #a67c00;
-}
-
-.check-servicio {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-top: 0.8rem;
-  background: #fffaf0;
-  border: 1.5px solid #d8c98f;
-  border-radius: 8px;
-  padding: 6px 12px;
-  transition: all 0.3s ease;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0e6c0;
 }
 
-.check-servicio:hover {
-  background: #fff4cc;
-  border-color: #a67c00;
-  box-shadow: 0 3px 10px rgba(166, 124, 0, 0.25);
+.servicio-item:last-child {
+  border-bottom: none;
 }
 
-.check-servicio span {
-  color: #000;
+.nombre {
   font-weight: 600;
+  color: #000;
+}
+
+.precios {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tachado {
+  text-decoration: line-through;
+  color: #b0b0b0;
   font-size: 0.95rem;
 }
 
-.check-servicio input {
-  accent-color: #a67c00;
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-
-/* ==================== BOTONES DEL MODAL ==================== */
-.modal-acciones {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.btn-guardar {
-  background: linear-gradient(90deg, #a67c00, #000);
-  color: #fff;
-  font-weight: 700;
-  border: none;
-  border-radius: 10px;
-  padding: 12px 22px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-guardar:hover {
-  background: linear-gradient(90deg, #000, #a67c00);
-  transform: scale(1.05);
-}
-
-.btn-cerrar {
-  background: #fff;
+.precio-final {
   color: #a67c00;
-  border: 2px solid #a67c00;
-  border-radius: 10px;
-  padding: 12px 22px;
   font-weight: 700;
-  cursor: pointer;
 }
 
-.btn-cerrar:hover {
+.precio-normal {
+  color: #000;
+  font-weight: 600;
+}
+
+.etiqueta-descuento {
   background: #a67c00;
   color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
-/* ==================== ANIMACIONES ==================== */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.totales-servicios {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 2px solid #a67c00;
 }
 
-@keyframes slideIn {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.totales-servicios p {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 600;
+  margin: 4px 0;
 }
 
-/* ==================== RESPONSIVE ==================== */
-@media (max-width: 900px) {
-  .modal-servicios {
-    width: 95%;
-    padding: 2rem;
-  }
+.totales-servicios strong {
+  color: #a67c00;
+}
 
-  .servicios-grid {
-    grid-template-columns: 1fr;
-  }
+/* ==================== BOTONES DE ACCIONES PRINCIPALES ==================== */
+.acciones-form {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;    
+  gap: 1.2rem;            
+  margin-top: 1.5rem;
+}
+
+.btn-servicios,
+.btn-pago,
+.btn-reservar-sin-pago {
+  width: 70%;            
+  max-width: 300px;       
+  text-align: center;
+  font-size: 1rem;
+  padding: 12px 20px;
+  border-radius: 10px;
+}
+
+
+/* ==================== ESTILO MEJORADO PARA DATOS DE HABITACIÓN ==================== */
+.detalle-habitacion {
+  background: linear-gradient(180deg, #fffdf5 0%, #fffaf0 100%);
+  border: 2px solid #d8c98f;
+  border-radius: 18px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 6px 18px rgba(166, 124, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.detalle-habitacion:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(166, 124, 0, 0.35);
+}
+
+/* Título principal */
+.detalle-habitacion h3 {
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-bottom: 3px solid #a67c00;
+  display: inline-block;
+  padding-bottom: 6px;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+}
+
+/* Texto de los detalles */
+.detalle-habitacion p {
+  font-size: 1.05rem;
+  color: #222;
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+/* Destacar los títulos */
+.detalle-habitacion strong {
+  color: #000;
+  font-weight: 700;
+  min-width: 180px;
+  display: inline-block;
+}
+
+/* Estado visualmente diferenciado */
+.estado-libre {
+  background: #dfffe0;
+  color: #006b2e;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 8px;
+  border: 1px solid #69c06c;
+}
+
+.estado-ocupada {
+  background: #ffe0e0;
+  color: #a30000;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 8px;
+  border: 1px solid #e59a9a;
+}
+
+/* Línea divisoria */
+.detalle-habitacion hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, #a67c00, #ffd700);
+  margin: 1.5rem 0;
 }

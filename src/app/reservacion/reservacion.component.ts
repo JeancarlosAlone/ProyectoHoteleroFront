@@ -58,7 +58,7 @@ export class ReservacionComponent implements OnInit {
       imagen: 'assets/img/servicios/estacionamiento.jpg', seleccionado: false
     },
     {
-      nombre: 'Desayuno incluido',
+      nombre: 'Desayuno incluido por días de estancia',
       descripcion: 'Buffet variado con platillos típicos y opciones internacionales.',
       precio: 20, descuento: 0, precioFinal: 20,
       imagen: 'assets/img/servicios/desayuno.jpg', seleccionado: false
@@ -232,7 +232,7 @@ export class ReservacionComponent implements OnInit {
         else if (noches === 4) descuento = 15;
         else if (noches === 3) descuento = 10;
         precioFinal = servicio.precio - (servicio.precio * descuento / 100);
-      } else if (servicio.nombre === 'Desayuno incluido') {
+      } else if (servicio.nombre === 'Desayuno incluido por días de estancia') {
         const precioBase = 20;
         if (noches === 2) descuento = 10;
         else if (noches === 3) descuento = 20;
@@ -343,6 +343,15 @@ export class ReservacionComponent implements OnInit {
     };
     this.errores = {};
   }
+
+  calcularTotalServicios(): number {
+  return this.serviciosSeleccionados.reduce((acc, s) => acc + (s.precioFinal || s.precio || 0), 0);
+}
+
+calcularTotalUSD(): string {
+  const totalQ = this.calcularTotalServicios();
+  return (totalQ / 7.74).toFixed(2);
+}
 
 
 }

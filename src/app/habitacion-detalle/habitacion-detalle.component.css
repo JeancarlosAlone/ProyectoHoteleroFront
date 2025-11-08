@@ -1,486 +1,584 @@
-/* ==================== FONDO Y CONTENEDOR GENERAL ==================== */
-body {
-  background: radial-gradient(circle at top, #fefefe, #e8ebf3);
-  min-height: 100vh;
-  font-family: "Poppins", sans-serif;
-}
+  /* ==================== ESTRUCTURA GENERAL ==================== */
+  .detalle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(180deg, #faf7e8 0%, #fffaf0 50%, #f9efc6 100%);
+    color: #000;
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+  }
 
-.detalle-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 50px 20px 60px;
-  color: #001b44;
-}
+  /* ==================== BLOQUES PRINCIPALES ==================== */
+  .bloques-inferiores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    width: 100%;
+    max-width: 1300px;
+  }
 
-/* ==================== ENCABEZADO Y BOTÓN REGRESAR ==================== */
-.header-detalle {
-  width: 100%;
-  max-width: 1300px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 0 10px;
-}
+  .bloque {
+    background: #fffdf5;
+    border-radius: 20px;
+    padding: 2rem 2.2rem;
+    box-shadow: 0 6px 25px rgba(166, 124, 0, 0.2);
+    flex: 1 1 480px;
+    border: 1px solid #d8c98f;
+    transition: 0.3s ease;
+  }
 
-.btn-regresar {
-  background: #0c2340;
-  color: #ffffff;
-  border: 2px solid #d4af37;
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 8px 20px;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
+  .bloque:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 35px rgba(166, 124, 0, 0.3);
+  }
 
-.btn-regresar i {
-  color: #d4af37;
-}
+  /* ==================== IMAGEN PRINCIPAL ==================== */
+  .image-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    border: 3px solid #a67c00;
+  }
 
-.btn-regresar:hover {
-  background: #d4af37;
-  color: #0c2340;
-  border-color: #0c2340;
-  transform: translateY(-1px);
-}
+  .room-image {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
 
-.btn-regresar:hover i {
-  color: #0c2340;
-}
+  .room-image:hover {
+    transform: scale(1.05);
+  }
 
-/* ==================== IMAGEN PRINCIPAL ==================== */
-.image-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 1300px;
-  height: 85vh;
-  overflow: hidden;
-  border-radius: 18px;
-  background: #ffffff;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
+  /* ==================== TÍTULOS ==================== */
+  h3 {
+    color: #000;
+    font-weight: 700;
+    border-bottom: 3px solid #a67c00;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-.room-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s ease;
-  border-radius: 18px;
-}
+  /* ==================== INPUTS Y VALIDACIÓN ==================== */
+  input {
+    width: 95%;
+    padding: 0.8rem 1rem;
+    border: 1.8px solid #d8c98f;
+    border-radius: 10px;
+    background: #fffdf6;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
 
-.room-image:hover {
-  transform: scale(1.03);
-}
+  input:focus {
+    outline: none;
+    border-color: #a67c00;
+    box-shadow: 0 0 10px rgba(166, 124, 0, 0.3);
+  }
 
-/* ==================== SECCIÓN DE BLOQUES ==================== */
-.bloques-inferiores {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  justify-content: center;
-  width: 100%;
-  max-width: 1200px;
-  margin-top: 40px;
-}
+  /* Campos obligatorios en error */
+  input.ng-invalid.ng-touched {
+    border: 2px solid #b71c1c !important;
+    background: #fff5f5 !important;
+  }
 
-.bloque {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px 30px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  flex: 1 1 480px;
-  transition: 0.3s ease;
-}
+  .mensaje-error {
+    color: #b71c1c;
+    background: #fff3f3;
+    border-left: 4px solid #b71c1c;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
 
-.bloque:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-}
+  /* ==================== BOTONES ==================== */
+  button {
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
 
-/* ==================== TÍTULOS ==================== */
-h3 {
-  color: #0c2340;
-  border-bottom: 3px solid #caa21c;
-  display: inline-block;
-  padding-bottom: 6px;
-  margin-bottom: 20px;
-  font-size: 1.3rem;
-  font-weight: 700;
-}
+  .btn-limpiar {
+    background: #f8f8f8;
+    color: #000;
+    border: 1px solid #a67c00;
+  }
 
-/* ==================== INPUTS ==================== */
-label {
-  font-weight: 600;
-  color: #001b44;
-}
+  .btn-limpiar:hover {
+    background: #a67c00;
+    color: white;
+  }
 
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="number"],
-input[type="date"] {
-  width: 95%;
-  padding: 10px 15px;
-  border: 1px solid #c9d1e0;
-  border-radius: 8px;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  font-size: 15px;
-  background: #f9fafc;
-  transition: 0.2s;
-}
+  /* Botón de servicios */
+  .btn-servicios {
+    background: linear-gradient(90deg, #fffdf5, #fff2c0);
+    color: #a67c00;
+    border: 2px solid #a67c00;
+  }
 
-input:focus {
-  border-color: #caa21c;
-  box-shadow: 0 0 0 3px rgba(202, 162, 28, 0.2);
-  background: #fff;
-}
+  .btn-servicios:hover {
+    background: #a67c00;
+    color: #fff;
+  }
 
-/* ==================== CAMPOS OBLIGATORIOS Y MENSAJES DE ERROR ==================== */
-.obligatorio {
-  color: #d62828;
-  font-weight: 700;
-}
+  /* Confirmar sin pago */
+  .btn-reservar-sin-pago {
+    background: #fffdf5;
+    border: 2px solid #000;
+    color: #000;
+  }
 
-.mensaje-error {
-  display: inline-block;
-  margin-top: -6px;
-  margin-bottom: 12px;
-  background: rgba(214, 40, 40, 0.06);
-  color: #a30000;
-  font-size: 13px;
-  padding: 5px 10px;
-  border-left: 3px solid #d62828;
-  border-radius: 6px;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-}
+  .btn-reservar-sin-pago:hover {
+    background: #000;
+    color: #ffd700;
+  }
 
-.mensaje-error::before {
-  content: "⚠ ";
-  color: #d62828;
-  font-weight: bold;
-}
+  /* Pagar reserva */
+  .btn-pago {
+    background: linear-gradient(90deg, #000, #a67c00);
+    color: #fff;
+  }
 
-input.ng-invalid.ng-touched {
-  border-color: #d62828 !important;
-  background: #fffafa;
-  box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.12);
-}
+  .btn-pago:hover {
+    background: linear-gradient(90deg, #a67c00, #000);
+    transform: scale(1.05);
+  }
 
-/* ==================== BOTONES ==================== */
-.btn-limpiar,
-.btn-servicios,
-.btn-pago {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  margin-top: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
+  /* ==================== MODAL PREMIUM DE SERVICIOS ==================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    animation: fadeIn 0.4s ease;
+    backdrop-filter: blur(5px);
+  }
 
-/* Botón Limpiar */
-.btn-limpiar {
-  background: #f0f0f0;
-  color: #0c2340;
-  border: 2px solid transparent;
-}
+  .modal-servicios {
+    background: #fffdf5;
+    width: 95%;
+    max-width: 1300px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 25px;
+    border: 2px solid #a67c00;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.35);
+    padding: 2.5rem 3rem;
+    animation: slideIn 0.5s ease;
+  }
 
-.btn-limpiar:hover {
-  background: #dcdcdc;
-  transform: translateY(-1px);
-}
+  /* Encabezado del modal */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #a67c00;
+    margin-bottom: 1.5rem;
+  }
 
-/* Botón Servicios */
-.btn-servicios {
-  background: transparent;
-  color: #caa21c;
-  border: 2px solid #caa21c;
-}
+  .modal-header h3 {
+    color: #000;
+    font-weight: 800;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+  }
 
-.btn-servicios:hover {
-  background: #caa21c;
-  color: #fff;
-}
+  .close-btn {
+    background: #a67c00;
+    color: #fff;
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(166, 124, 0, 0.3);
+    transition: all 0.3s ease;
+  }
 
-/* Botón Pagar */
-.btn-pago {
-  background: #0c2340;
-  color: #fff;
-  border: 2px solid #0c2340;
-}
+  .close-btn:hover {
+    background: #000;
+    color: #ffd700;
+    transform: scale(1.1);
+  }
 
-.btn-pago:hover {
-  background: #caa21c;
-  color: #0c2340;
-  border-color: #caa21c;
-  box-shadow: 0 6px 15px rgba(202, 162, 28, 0.4);
-}
 
-/* ==================== ESTADOS DE HABITACIÓN ==================== */
-.estado-libre {
-  color: #27ae60;
-  font-weight: 700;
-}
+  /* ==================== AGRUPACIÓN POR CATEGORÍAS ==================== */
+  .categoria-servicio {
+    margin-bottom: 2rem;
+  }
 
-.estado-ocupada {
-  color: #e74c3c;
-  font-weight: 700;
-}
+  .categoria-servicio h4 {
+    background: linear-gradient(90deg, #a67c00, #ffd700);
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(166, 124, 0, 0.25);
+  }
 
-/* ==================== SERVICIOS SELECCIONADOS ==================== */
+  /* ==================== TARJETAS DE SERVICIO ==================== */
+  .servicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .servicio-card {
+    background: #fffef9;
+    border: 1px solid #e6dca8;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(166, 124, 0, 0.2);
+    transition: 0.3s;
+  }
+
+  .servicio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(166, 124, 0, 0.3);
+  }
+
+  .servicio-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+
+  .servicio-info {
+    padding: 1rem 1.2rem;
+  }
+
+  .servicio-info h4 {
+    color: #000;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .precio-con-descuento {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: #a67c00;
+  }
+
+  .precio-original {
+    text-decoration: line-through;
+    color: #888;
+  }
+
+  .badge-descuento {
+    background: #a67c00;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+
+  .check-servicio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+
+  .check-servicio input {
+    accent-color: #a67c00;
+  }
+
+  .check-servicio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.8rem;
+    background: #fffaf0;
+    border: 1.5px solid #d8c98f;
+    border-radius: 8px;
+    padding: 6px 12px;
+    transition: all 0.3s ease;
+  }
+
+  .check-servicio:hover {
+    background: #fff4cc;
+    border-color: #a67c00;
+    box-shadow: 0 3px 10px rgba(166, 124, 0, 0.25);
+  }
+
+  .check-servicio span {
+    color: #000;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .check-servicio input {
+    accent-color: #a67c00;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+
+  /* ==================== BOTONES DEL MODAL ==================== */
+  .modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn-guardar {
+    background: linear-gradient(90deg, #a67c00, #000);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 22px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn-guardar:hover {
+    background: linear-gradient(90deg, #000, #a67c00);
+    transform: scale(1.05);
+  }
+
+  .btn-cerrar {
+    background: #fff;
+    color: #a67c00;
+    border: 2px solid #a67c00;
+    border-radius: 10px;
+    padding: 12px 22px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .btn-cerrar:hover {
+    background: #a67c00;
+    color: #fff;
+  }
+
+  /* ==================== ANIMACIONES ==================== */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+  @media (max-width: 900px) {
+    .modal-servicios {
+      width: 95%;
+      padding: 2rem;
+    }
+
+    .servicios-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ==================== SERVICIOS SELECCIONADOS ==================== */
 .servicios-seleccionados {
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 15px;
-  border-left: 4px solid #caa21c;
+  background: #fff;
+  border: 2px solid #a67c00;
+  border-radius: 15px;
+  padding: 1.5rem 2rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 15px rgba(166, 124, 0, 0.25);
 }
 
 .servicios-seleccionados h4 {
-  color: #0c2340;
-  margin-bottom: 10px;
+  color: #000;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid #a67c00;
+  display: inline-block;
+  padding-bottom: 4px;
 }
 
-.servicios-seleccionados li {
-  color: #001b44;
-  font-size: 0.95rem;
-  margin-bottom: 6px;
+.lista-servicios {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.servicio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0e6c0;
+}
+
+.servicio-item:last-child {
+  border-bottom: none;
+}
+
+.nombre {
+  font-weight: 600;
+  color: #000;
+}
+
+.precios {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .tachado {
   text-decoration: line-through;
-  color: #888;
-  margin-right: 5px;
-}
-
-/* ============================================================
-   🔵 MODAL DE SERVICIOS — MISMO ESTILO QUE LAS TARJETAS
-============================================================ */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  animation: fadeIn 0.3s ease;
-}
-
-.modal-servicios {
-  background: radial-gradient(circle at top, #0c2340, #030e1c);
-  width: 90%;
-  max-width: 1100px;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  animation: slideIn 0.4s ease;
-}
-
-/* Header del modal */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 1rem;
-}
-
-.modal-header h3 {
-  color: #ffffff;
-  font-size: 1.6rem;
-  font-weight: 700;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: #ffffff;
-  transition: 0.2s;
-}
-
-.close-btn:hover {
-  color: #caa21c;
-}
-
-/* Contenido del modal */
-.info-noches {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  border-left: 5px solid #caa21c;
-  margin-bottom: 1.2rem;
+  color: #b0b0b0;
   font-size: 0.95rem;
 }
 
-/* Tarjetas de servicios */
-.servicios-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.2rem;
-}
-
-.servicio-card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.servicio-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-}
-
-.servicio-img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-}
-
-.servicio-info {
-  padding: 1rem;
-}
-
-.servicio-info h4 {
-  color: #0c2340;
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-bottom: 0.4rem;
-}
-
-.servicio-info p {
-  color: #444;
-  font-size: 0.9rem;
-  margin-bottom: 0.6rem;
-}
-
-.precio-original {
-  text-decoration: line-through;
-  color: #999;
-}
-
 .precio-final {
-  color: #27ae60;
+  color: #a67c00;
   font-weight: 700;
 }
 
-.badge-descuento {
-  background: #caa21c;
+.precio-normal {
+  color: #000;
+  font-weight: 600;
+}
+
+.etiqueta-descuento {
+  background: #a67c00;
   color: #fff;
   font-size: 0.75rem;
   padding: 2px 6px;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
-/* Check de selección */
-.check-servicio {
+.totales-servicios {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 2px solid #a67c00;
+}
+
+.totales-servicios p {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.totales-servicios strong {
+  color: #a67c00;
+}
+/* ==================== BOTONES DE ACCIONES PRINCIPALES ==================== */
+.acciones-form {
   display: flex;
+  justify-content: center; /* Centra los botones en la línea */
   align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.check-servicio input {
-  accent-color: #caa21c;
-  width: 18px;
-  height: 18px;
-}
-
-.check-servicio span {
-  color: #001b44;
-  font-weight: 500;
-}
-
-/* Botones del modal */
-.modal-acciones {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  gap: 1rem; /* Espacio entre botones */
   margin-top: 1.5rem;
 }
 
-.btn-guardar,
-.btn-cerrar {
-  padding: 12px 20px;
-  border: none;
+.btn-servicios,
+.btn-pago,
+.btn-reservar-sin-pago {
+  min-width: 180px;
+  text-align: center;
+}
+
+/* ==================== ESTILO MEJORADO PARA DATOS DE HABITACIÓN ==================== */
+.detalle-habitacion {
+  background: linear-gradient(180deg, #fffdf5 0%, #fffaf0 100%);
+  border: 2px solid #d8c98f;
+  border-radius: 18px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 6px 18px rgba(166, 124, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.detalle-habitacion:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(166, 124, 0, 0.35);
+}
+
+/* Título principal */
+.detalle-habitacion h3 {
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-bottom: 3px solid #a67c00;
+  display: inline-block;
+  padding-bottom: 6px;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+}
+
+/* Texto de los detalles */
+.detalle-habitacion p {
+  font-size: 1.05rem;
+  color: #222;
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+/* Destacar los títulos */
+.detalle-habitacion strong {
+  color: #000;
+  font-weight: 700;
+  min-width: 180px;
+  display: inline-block;
+}
+
+/* Estado visualmente diferenciado */
+.estado-libre {
+  background: #dfffe0;
+  color: #006b2e;
+  font-weight: 700;
+  padding: 2px 10px;
   border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
+  border: 1px solid #69c06c;
 }
 
-.btn-guardar {
-  background: #caa21c;
-  color: #0c2340;
+.estado-ocupada {
+  background: #ffe0e0;
+  color: #a30000;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 8px;
+  border: 1px solid #e59a9a;
 }
 
-.btn-guardar:hover {
-  background: #b8860b;
-  color: #ffffff;
+/* Línea divisoria */
+.detalle-habitacion hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, #a67c00, #ffd700);
+  margin: 1.5rem 0;
 }
 
-.btn-cerrar {
-  background: #e2e2e2;
-  color: #333;
-}
 
-.btn-cerrar:hover {
-  background: #bbb;
-}
 
-/* ==================== ANIMACIONES ==================== */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
 
-@keyframes slideIn {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* ==================== RESPONSIVE ==================== */
-@media (max-width: 768px) {
-  .image-wrapper {
-    height: 60vh;
-  }
-
-  .bloques-inferiores {
-    flex-direction: column;
-    padding: 0 10px;
-  }
-
-  .btn-regresar {
-    padding: 8px 14px;
-    font-size: 14px;
-  }
-
-  .bloque {
-    padding: 20px;
-  }
-
-  .modal-servicios {
-    width: 95%;
-    padding: 1.5rem;
-  }
-}

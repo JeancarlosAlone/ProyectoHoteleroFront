@@ -103,8 +103,9 @@
         </span>
       </p>
 
-      <p><strong>Precio base:</strong> Q {{ habitacion?.precio }}</p>
-      
+      <p><strong>Precio por Noche:</strong> Q {{ habitacion?.precio }}</p>
+      <p><strong>Precio Total por noche (USD):</strong> $ {{ precioPaypal(habitacion?.precio) }}</p>
+     
       <hr />
 
       <!-- Botón para abrir modal de servicios -->
@@ -113,20 +114,34 @@
       </button>
 
       <!-- Lista de servicios seleccionados -->
-      <div class="servicios-seleccionados" *ngIf="serviciosSeleccionados.length > 0">
-        <h4>🧾 Servicios seleccionados</h4>
-        <ul>
-          <li *ngFor="let s of serviciosSeleccionados">
-            <span class="nombre">{{ s.nombre }}</span>
-            <span *ngIf="s.descuento > 0" class="precio-descuento">
-              <span class="tachado">Q {{ s.precio }}</span>
-              <strong> Q {{ s.precioFinal }}</strong>
-              <small class="etiqueta-descuento">{{ s.descuento }}% OFF</small>
-            </span>
-            <span *ngIf="!s.descuento || s.descuento === 0">Q {{ s.precio }}</span>
-          </li>
-        </ul>
+<div class="servicios-seleccionados" *ngIf="serviciosSeleccionados.length > 0">
+  <h4>Servicios seleccionados</h4>
+  <ul class="lista-servicios">
+    <li *ngFor="let s of serviciosSeleccionados">
+      <div class="servicio-item">
+        <span class="nombre">{{ s.nombre }}</span>
+
+        <div class="precios">
+          <ng-container *ngIf="s.descuento > 0; else sinDescuento">
+            <span class="tachado">Q {{ s.precio }}</span>
+            <span class="precio-final">Q {{ s.precioFinal }}</span>
+            <span class="etiqueta-descuento">{{ s.descuento }}% OFF</span>
+          </ng-container>
+
+          <ng-template #sinDescuento>
+            <span class="precio-normal">Q {{ s.precio }}</span>
+          </ng-template>
+        </div>
       </div>
+    </li>
+  </ul>
+
+  <div class="totales-servicios">
+    <p><strong>Total servicios:</strong> Q {{ calcularTotalServicios() }}</p>
+    <p><strong>Total a pagar (USD):</strong> $ {{ calcularTotalUSD() }}</p>
+  </div>
+</div>
+
 
       <button class="btn-pago" (click)="irAPago()">Pagar Reserva</button>
     </div>

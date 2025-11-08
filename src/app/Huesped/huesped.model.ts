@@ -33,15 +33,10 @@ export interface HuespedRequest {
   id_users?: string | null;
   usuarioRegistrador?: User | null;
 
-  /**
-   * 🔹 Campo opcional con ID directo de la habitación
-   * (para cuando el backend no devuelve el objeto anidado)
-   */
+ 
   id_Rooms?: number;
 
-  /**
-   * 🔹 Objeto completo de habitación (cuando se incluye relación)
-   */
+ 
   habitacionAsignada?: {
     id_Rooms: number;
     estado: 'ocupada' | 'libre' | 'limpieza';
@@ -51,9 +46,7 @@ export interface HuespedRequest {
     image_url?: string;
   } | null;
 
-  /**
-   * 💵 Monto convertido a dólares (calculado en backend)
-   */
+  
   montoUSD?: number;
 }
 

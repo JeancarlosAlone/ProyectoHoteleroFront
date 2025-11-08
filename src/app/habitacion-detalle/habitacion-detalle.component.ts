@@ -45,7 +45,7 @@ export class HabitacionDetalleComponent implements OnInit {
       imagen: 'assets/img/servicios/estacionamiento.jpg', seleccionado: false
     },
     {
-      nombre: 'Desayuno incluido',
+      nombre: 'Desayuno incluido por días de estancia',
       descripcion: 'Buffet variado con platillos típicos y opciones internacionales.',
       precio: 20, descuento: 0, precioFinal: 20,
       imagen: 'assets/img/servicios/desayuno.jpg', seleccionado: false
@@ -109,6 +109,8 @@ export class HabitacionDetalleComponent implements OnInit {
       this.cliente.fechaInicio = this.minFechaEntrada;
     }
   }
+
+  
 
   
 
@@ -196,7 +198,7 @@ export class HabitacionDetalleComponent implements OnInit {
         else if (noches === 3) descuento = 10;
         else descuento = 0;
         precioFinal = servicio.precio - (servicio.precio * descuento / 100);
-      } else if (servicio.nombre === 'Desayuno incluido') {
+      } else if (servicio.nombre === 'Desayuno incluido por días de estancia') {
         const precioBase = 20;
         if (noches === 2) descuento = 10;
         else if (noches === 3) descuento = 20;
@@ -271,5 +273,35 @@ limpiarCampos() {
   };
   this.errores = {};
 }
+
+ precioPaypal(preciohabitacion: any) {
+      // Actualiza precioFinal de los servicios y calcula el total
+      let totalServicios = 0;
+      this.listaServicios.forEach(servicio => {
+      
+        if (servicio.seleccionado) {
+          totalServicios += Number((servicio.precioFinal||servicio.precio||0 ));
+        }
+      });
+      const precioHabitacionUSD = Number((preciohabitacion ));
+      const { fechaInicio, fechaFin } = this.cliente;
+      const inicio = new Date(fechaInicio);
+      let noches = 1;
+        const fin = new Date(fechaFin);
+        const diffMs = fin.getTime() - inicio.getTime();
+        noches = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+       
+      return ((precioHabitacionUSD* noches + totalServicios)/7.74).toFixed(2);  ;
+    }
+
+    calcularTotalServicios(): number {
+  return this.serviciosSeleccionados.reduce((acc, s) => acc + (s.precioFinal || s.precio || 0), 0);
+}
+
+calcularTotalUSD(): string {
+  const totalQ = this.calcularTotalServicios();
+  return (totalQ / 7.74).toFixed(2);
+}
+
 
 }

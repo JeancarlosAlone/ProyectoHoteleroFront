@@ -6,28 +6,43 @@
     <i class="fa-solid fa-arrow-left"></i> Regresar
   </button>
 </div>
-  <h2>💳 Pago de Reserva</h2>
+  <h2>Pago de Reserva</h2>
 
   <div class="resumen">
     <h3>Resumen de la habitación</h3>
     <p><strong>Número de habitación</strong> {{ habitacion?.id_Rooms }}</p>
     <p><strong>Tipo:</strong> {{ habitacion?.habitacion | titlecase }}</p>
     <p><strong>Nivel:</strong> {{ habitacion?.nivel }}</p>
-    <p><strong>Precio:</strong> Q {{ habitacion?.precio }}</p>
+    <p><strong>Precio por noche:</strong> Q {{ habitacion?.precio }}</p>
+    <p><strong>Precio Total a cancelar (USD):</strong> $ {{ precioPaypal(habitacion?.precio) }}</p>
 
-    <h3>Servicios adicionales</h3>
-    <div *ngIf="serviciosSeleccionados.length > 0; else sinServicios">
-      <ul>
-        <li *ngFor="let servicio of serviciosSeleccionados">
-          {{ servicio.nombre }} —
-          <span *ngIf="servicio.precioFinal !== undefined">
-            Q {{ servicio.precioFinal }}
-            <small *ngIf="servicio.descuento && servicio.descuento > 0"> ({{ servicio.descuento }}% desc.)</small>
-          </span>
-          <span *ngIf="servicio.precioFinal === undefined">
-            Q {{ servicio.precio }}
-          </span>
-        </li>
+     <!-- Lista de servicios seleccionados -->
+<div class="servicios-seleccionados" *ngIf="serviciosSeleccionados.length > 0">
+  <h4>Servicios seleccionados</h4>
+  <ul class="lista-servicios">
+    <li *ngFor="let s of serviciosSeleccionados">
+      <div class="servicio-item">
+        <span class="nombre">{{ s.nombre }}</span>
+
+        <div class="precios">
+          <ng-container *ngIf="s.descuento > 0; else sinDescuento">
+            <span class="tachado">Q {{ s.precio }}</span>
+            <span class="precio-final">Q {{ s.precioFinal }}</span>
+            <span class="etiqueta-descuento">{{ s.descuento }}% OFF</span>
+          </ng-container>
+
+          <ng-template #sinDescuento>
+            <span class="precio-normal">Q {{ s.precio }}</span>
+          </ng-template>
+        </div>
+      </div>
+    </li>
+  
+    <div class="totales-servicios">
+    <p><strong>Total servicios:</strong> Q {{ calcularTotalServicios() }}</p>
+    <p><strong>Total a pagar (USD):</strong> $ {{ calcularTotalUSD() }}</p>
+  </div>
+
 
       </ul>
     </div>
@@ -44,9 +59,17 @@
 
     <hr />
 
-    <h3>Total en Dólares: <span class="total">$ {{ total }}</span></h3>
-    <h3>Total en Quetzalez: <span class="total">Q {{ totalqutzales }}</span></h3>
-  </div>
+    <h3>
+  Total en Dólares:
+  <span class="total">$ {{ calcularTotalGeneralUSD() }}</span>
+</h3>
+
+<h3>
+  Total en Quetzales:
+  <span class="total">Q {{ calcularTotalQuetzales() }}</span>
+</h3>
+
+
 
   <div id="paypal-button-container"></div>
   <p class="mensaje-pago">{{ mensaje }}</p>

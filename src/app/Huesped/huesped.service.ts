@@ -20,10 +20,6 @@ export class HuespedService {
   private manualHuespedes: HuespedResponse[] = [];
   private enLineaHuespedes: HuespedResponse[] = [];
 
-  // ======================================================
-  // 🔹 MÉTODOS BASE DE HUÉSPEDES
-  // ======================================================
-
   setHuespedAEditar(huesped: HuespedResponse) {
     this.huespedAEditarSubject.next(huesped);
   }
@@ -77,9 +73,6 @@ export class HuespedService {
     );
   }
 
-  // ======================================================
-  // 🔹 NUEVO MÉTODO: ACTUALIZAR ESTADO DE HABITACIÓN
-  // ======================================================
   actualizarEstadoHabitacion(idRoom: number, nuevoEstado: string): Observable<any> {
     return this._http.patch(`${this.roomsUrl}/${idRoom}/estado`, { estado: nuevoEstado }).pipe(
       tap(() => console.log(`Habitación ${idRoom} actualizada a estado: ${nuevoEstado}`)),
