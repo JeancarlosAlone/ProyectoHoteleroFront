@@ -1,3 +1,4 @@
+
 import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -190,50 +191,36 @@ body: JSON.stringify({ total: Number(this.calcularTotalGeneralUSD()), currency: 
       },
 
       onApprove: async (data: any) => {
-        try {
-          this.mensaje = 'Procesando pago...';
+  try {
+    this.mensaje = 'Procesando pago...';
 
-          const cap = await fetch(`${environment.apiUrl}/api/pagos/capturar-orden`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ orderId: data.orderID })
-          });
-          const capJson = await cap.json();
-          if (!capJson) throw new Error('No se pudo capturar la orden');
+    const cap = await fetch(`${environment.apiUrl}/api/pagos/capturar-orden`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: data.orderID })
+    });
+    const capJson = await cap.json();
+    if (!capJson) throw new Error('No se pudo capturar la orden');
 
-          // Generar factura
-          try {
-            const fac = await fetch(`${environment.apiUrl}/api/facturas/generar`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                cliente: this.cliente,
-                habitacion: this.habitacion,
-                serviciosSeleccionados: this.serviciosSeleccionados,
-                total: this.total
-              })
-            });
-            const facJson = await fac.json();
-            this.mostrarModalConMensaje(
-              facJson?.ok
-                ? `Factura enviada al correo ${this.cliente?.email || ''}`
-                : 'Pago realizado, pero hubo un problema al generar/enviar la factura.'
-            );
-          } catch {
-            this.mostrarModalConMensaje(
-              'Pago realizado, pero hubo un problema al generar/enviar la factura.'
-            );
-          }
+    // Redirigir según el tipo de usuario
+    const userRole = localStorage.getItem('role');  // Obtener el rol desde localStorage
 
-          const esUsuario = this.isUserContext();
-          this.registrarYRedirigir(esUsuario);
-        } catch (err) {
-          console.error(err);
-          this.mensaje = 'Error en PayPal';
-          const esUsuario = this.isUserContext();
-          this.navigateHard(esUsuario ? '/SACH/habitaciones' : '/reservar');
-        }
-      },
+    // Si es cliente, redirige a '/reservar'
+    if (userRole === 'client') {
+      this.navigateHard(`/reservar/${data.orderID}`);
+    }
+    // Si es admin o user, redirige a '/SACH/habitaciones'
+    else {
+      this.navigateHard('/SACH/habitaciones');
+    }
+
+  } catch (err) {
+    console.error(err);
+    this.mensaje = 'Error en PayPal';
+    this.navigateHard('/login');  // Si ocurre un error, redirige a login
+  }
+}
+,
 
       onError: (err: any) => {
         console.error(err);
@@ -304,11 +291,15 @@ calcularTotalGeneralUSD(): string {
 }
 
 calcularTotalQuetzales(): number {
-  const precioHabitacion = this.habitacion?.precio || 0;
-  const totalServicios = this.calcularTotalServicios();
- const total = ((precioHabitacion * 7.74) + totalServicios).toFixed(2);
-  return parseFloat (total);
+  // Obtener el total en USD llamando a la función calcularTotalGeneralUSD()
+  const totalUSD = parseFloat(this.calcularTotalGeneralUSD());
+
+  // Multiplicar el total en USD por la tasa de cambio 7.74 para convertirlo a quetzales
+  const totalQuetzales = (totalUSD * 7.74).toFixed(2);  // Redondear a 2 decimales
+
+  return Number(totalQuetzales);  // Devolver el total en quetzales como número
 }
 
 
-}
+
+} 

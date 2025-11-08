@@ -1,7 +1,7 @@
 <div class="pago-container">
-  <h2>💳 Pago de Reserva</h2>
+  <h2>Pago de Reserva</h2>
 
-  <!-- ===================== BÚSQUEDA ===================== -->
+  <!-- Búsqueda del cliente -->
   <div class="busqueda">
     <input
       type="text"
@@ -9,14 +9,12 @@
       [(ngModel)]="clienteIdentifier"
       (input)="buscarCliente()"
     />
-
-    <!-- Botón Limpiar -->
     <button class="btn-limpiar" (click)="limpiarBusqueda()">
       <i class="fa-solid fa-broom"></i> Limpiar
     </button>
   </div>
 
-  <!-- ===================== LISTA DE RESULTADOS ===================== -->
+  <!-- Resultados de la búsqueda -->
   <div class="resultados" *ngIf="clientesEncontrados.length > 0">
     <p>Seleccione el cliente correcto:</p>
     <ul>
@@ -29,38 +27,12 @@
 
   <hr />
 
-  <!-- ===================== RESUMEN ===================== -->
+  <!-- Resumen del pago -->
   <div *ngIf="cliente; else noCliente">
     <div class="resumen">
-      <h3>Resumen de la habitación</h3>
-      <p><strong>Número de habitación:</strong> {{ habitacion?.id_Rooms }}</p>
-      <p><strong>Tipo:</strong> {{ habitacion?.habitacion | titlecase }}</p>
-      <p><strong>Precio por noche:</strong> Q {{ precioPorNoche | number: '1.2-2' }}</p>
-      <p><strong>Precio total por noches:</strong> $ {{ precioTotalUsd | number:'1.2-2' }}</p>
-
-      <h3>Servicios adicionales</h3>
-      <div *ngIf="serviciosSeleccionados.length > 0; else sinServicios">
-        <ul>
-          <li *ngFor="let servicio of serviciosSeleccionados">
-            {{ servicio.nombre }} — 
-            Q {{ servicio.precioFinal || servicio.precio }}
-            <small *ngIf="servicio.descuento">({{ servicio.descuento }}%)</small>
-          </li>
-        </ul>
-        <p><strong>Total servicios:</strong> Q {{ cliente?.totalServicios || 0 | number: '1.2-2' }}</p>
-        <p><strong>Total servicios (USD):</strong> $ {{ totalServiciosUsd | number:'1.2-2' }}</p>
-      </div>
-      <ng-template #sinServicios>
-        <p class="texto-secundario">Sin servicios adicionales seleccionados.</p>
-      </ng-template>
-
-      <hr />
-
-      <h3>Datos del cliente</h3>
+      <h3>Resumen de la reserva</h3>
       <p><strong>Nombre:</strong> {{ cliente?.nameHuesped }} {{ cliente?.apellidoHuesped }}</p>
-      <p><strong>Teléfono:</strong> {{ cliente?.telefono }}</p>
-      <p><strong>Número de personas:</strong> {{ cliente?.numPersonas }}</p>
-      <p><strong>Estado:</strong> {{ cliente?.statusHuesped }}</p>
+      <p><strong>Monto a pagar (USD):</strong> $ {{ precioPaypal(habitacion?.precio) }}</p>
 
       <hr />
 
@@ -80,36 +52,18 @@
         </p>
       </div>
 
-      <hr />
-
-      <h3 class="total-title">
-        Total a pagar (USD): 
-        <span class="total-usd">$ {{ totalUsd | number:'1.2-2' }}</span>
-      </h3>
-    </div>
-
-    <!-- ===================== BOTONES PAYPAL ===================== -->
-    <div *ngIf="correoValido; else noCorreo">
       <div id="paypal-button-container"></div>
     </div>
-
-    <ng-template #noCorreo>
-      <p class="mensaje-pago aviso">
-        Ingrese un correo válido para habilitar el pago.
-      </p>
-    </ng-template>
   </div>
 
   <ng-template #noCliente>
-    <p class="texto-secundario">
-      Busque el cliente que tiene pendiente su pago de reserva
-    </p>
+    <p class="texto-secundario">Busque el cliente que tiene pendiente su pago de reserva</p>
   </ng-template>
 
   <p class="mensaje-pago">{{ mensaje }}</p>
 </div>
 
-<!-- ===================== MODAL ===================== -->
+<!-- Modal de confirmación -->
 <div *ngIf="mostrarModal" class="modal-backdrop">
   <div class="modal-contenido">
     <h2>{{ mensajeModal }}</h2>

@@ -57,18 +57,19 @@
       <p><strong>Tipo de Registro:</strong> {{ huesped.tipoRegistro | titlecase }}</p>
 
       <div *ngIf="huesped.statusHuesped === 'pagado'" class="switch-container">
-        <label class="switch-label">Terminar estadía:</label>
-        <label class="switch">
-          <input
-            type="checkbox"
-            [checked]="huesped.habitacionAsignada?.estado === 'libre'"
-            (change)="terminarEstadia(huesped, $event)"
-            [disabled]="huesped.habitacionAsignada?.estado === 'libre'"
-          />
-          <span class="slider"></span>
-        </label>
-        <small *ngIf="huesped.habitacionAsignada?.estado === 'libre'">Finalizada</small>
-      </div>
+  <label class="switch-label">Terminar estadía:</label>
+  <label class="switch">
+    <input
+      type="checkbox"
+      [checked]="huesped.habitacionAsignada?.estado === 'libre'"
+      (change)="terminarEstadia(huesped, $event)"
+      [disabled]="huesped.habitacionAsignada?.estado === 'libre'"
+    />
+    <span class="slider"></span>
+  </label>
+  <small *ngIf="huesped.habitacionAsignada?.estado === 'libre'">Finalizada</small>
+</div>
+
 
      
     </div>

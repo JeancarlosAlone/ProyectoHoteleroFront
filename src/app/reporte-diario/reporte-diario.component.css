@@ -207,3 +207,38 @@ h2 {
     padding: 3px !important;
   }
 }
+
+/* =================== ACCIONES EXPANDIBLES =================== */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #A67C00;
+  font-weight: bold;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* =================== DESPLEGABLES DE CLIENTES =================== */
+button i {
+  margin-right: 0.5rem;
+}
+
+button:hover {
+  color: #FFD700;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.expanded {
+  display: block;
+}
+
+.collapsed {
+  display: none;
+}
+

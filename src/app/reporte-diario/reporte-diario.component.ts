@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core'; 
 import { CommonModule } from '@angular/common'; 
 import { HuespedService } from '../Huesped/huesped.service'; 
@@ -45,23 +46,23 @@ export class ReporteDiarioComponent implements OnInit {
     this.roomService.loadRooms();
     this.roomService.getRooms().subscribe((roomList) => {
       this.rooms = roomList;
-      this.separarPorNivel(roomList);
+      this.separarPorNivel(roomList);  // Separar habitaciones en primer y segundo nivel
     });
   }
 
   private cargarHuespedes(): void {
     this.huespedService.getHuespedes().subscribe((huespedes) => {
-  this.huespedes = huespedes; // ✅ ahora incluye todos, incluso cancelados
-});
-
+      this.huespedes = huespedes;
+    });
   }
 
   private separarPorNivel(roomList: Room[]): void {
-    this.roomsNivel1 = roomList.filter((room) => room.nivel === 'N1');
-    this.roomsNivel2 = roomList.filter((room) => room.nivel === 'N2');
+    // Filtrar y ordenar las habitaciones por nivel y número de habitación
+    this.roomsNivel1 = roomList.filter(room => room.id_Rooms < 200).sort((a, b) => a.id_Rooms - b.id_Rooms); // Primer nivel
+    this.roomsNivel2 = roomList.filter(room => room.id_Rooms >= 200).sort((a, b) => a.id_Rooms - b.id_Rooms); // Segundo nivel
   }
 
-  actualizarDia() {
+  private actualizarDia() {
     const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sabado'];
     this.dia = diasSemana[this.Fecha.getDay()];
   }
@@ -84,6 +85,7 @@ export class ReporteDiarioComponent implements OnInit {
     }
   }
 
+  // Obtener el huesped por habitacion y fecha
   getHuespedPorHabitacion(idRoom: number): HuespedResponse | null {
     const huesped = this.huespedes.find(h => {
       const fechaRegistro = h.fechaRegistro ? new Date(h.fechaRegistro) : null;

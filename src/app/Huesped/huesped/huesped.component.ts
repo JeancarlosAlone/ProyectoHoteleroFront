@@ -68,37 +68,42 @@ export class HuespedComponent implements OnInit {
   }
 
   terminarEstadia(huesped: HuespedResponse, event: any): void {
-    const isChecked = event.target.checked;
+  const isChecked = event.target.checked;
 
-    if (isChecked && huesped.statusHuesped === 'pagado') {
-      const idRoom = huesped.habitacionAsignada?.id_Rooms || (huesped as any).id_Rooms;
+  if (isChecked && huesped.statusHuesped === 'pagado') {
+    const idRoom = huesped.habitacionAsignada?.id_Rooms || (huesped as any).id_Rooms;
 
-      if (!idRoom) {
-        alert('No se encontró la habitación asociada a este huésped.');
-        event.target.checked = false;
-        return;
-      }
-
-      this.huespedService.actualizarEstadoHabitacion(idRoom, 'libre').subscribe({
-        next: (res) => {
-          console.log('Estado actualizado:', res);
-          alert('Habitación marcada como libre.');
-
-          if (huesped.habitacionAsignada) {
-            huesped.habitacionAsignada.estado = 'libre';
-          }
-        },
-        error: (err) => {
-          console.error('Error al actualizar la habitación:', err);
-          alert('Error al actualizar la habitación.');
-          event.target.checked = false;
-        }
-      });
-    } else {
+    if (!idRoom) {
+      alert('No se encontró la habitación asociada a este huésped.');
       event.target.checked = false;
-      alert('Solo se puede finalizar una estadía con estado "Pagado".');
+      return;
     }
+
+    // Actualizar el estado de la habitación a "libre" en el backend
+    this.huespedService.actualizarEstadoHabitacion(idRoom, 'libre').subscribe({
+      next: (res) => {
+        console.log('Estado actualizado:', res);
+        alert('Habitación marcada como libre.');
+
+        // Una vez que el estado se actualiza en el backend, actualizamos la UI
+        if (huesped.habitacionAsignada) {
+          huesped.habitacionAsignada.estado = 'libre';  // Actualizamos el estado en la UI
+        }
+
+        // Actualizar el estado del botón
+        event.target.disabled = true;  // Deshabilitar el botón después de marcar la habitación como libre
+      },
+      error: (err) => {
+        console.error('Error al actualizar la habitación:', err);
+        alert('Error al actualizar la habitación.');
+        event.target.checked = false;
+      }
+    });
+  } else {
+    event.target.checked = false;
+    alert('Solo se puede finalizar una estadía con estado "Pagado".');
   }
+}
 
 
   limpiarFiltros(): void {
