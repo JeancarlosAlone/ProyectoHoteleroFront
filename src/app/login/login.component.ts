@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { UsersService } from '../Users/Users.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -50,13 +51,15 @@ export class LoginComponent {
         this.router.navigate(['/SACH/habitaciones']);
       },
       error: (err) => {
+        console.error('[LoginComponent] auth login error:', err?.status, err?.error || err);
+        // Intentamos luego el login como cliente
         this.tryClientLogin();
       },
     });
   }
 
   private tryClientLogin(): void {
-    this.http.post('http://localhost:8080/api/clientes/login', {
+  this.http.post(`${environment.apiUrl}/api/clientes/login`, {
       correo: this.username,
       password: this.password
     }).subscribe({
@@ -65,8 +68,13 @@ export class LoginComponent {
         this.router.navigate(['/reservar']);
       },
       error: (err) => {
+        console.error('[LoginComponent] clientes login error:', err?.status, err?.error || err);
         if (err.status === 0) {
           this.loginErrorMessage = 'No se logró establecer conexión con el servidor.';
+        } else if (err.status === 404) {
+          this.loginErrorMessage = 'Ruta de login de cliente no encontrada en el backend (404).';
+        } else if (err.status === 500) {
+          this.loginErrorMessage = 'Error interno en el servidor al intentar autenticar (500). Revisa logs del backend.';
         } else {
           this.loginErrorMessage = 'Credenciales incorrectas o usuario no encontrado. Valide que su nombre y contraseña sean correctos.';
         }
@@ -90,7 +98,7 @@ export class LoginComponent {
       return;
     }
 
-    this.http.post('http://localhost:8080/api/clientes/register', this.registerData).subscribe({
+  this.http.post(`${environment.apiUrl}/api/clientes/register`, this.registerData).subscribe({
       next: () => {
         alert('Cliente registrado correctamente.');
         this.closeRegisterModal();

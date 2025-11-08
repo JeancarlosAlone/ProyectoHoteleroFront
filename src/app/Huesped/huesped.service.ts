@@ -2,14 +2,15 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HuespedRequest, HuespedResponse } from './huesped.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HuespedService {
   private _http = inject(HttpClient);
-  private huespedUrl = 'http://localhost:8080/huesped';
-  private roomsUrl = 'http://localhost:8080/rooms'; 
+  private huespedUrl = `${environment.apiUrl}/huesped`;
+  private roomsUrl = `${environment.apiUrl}/rooms`; 
 
   private huespedSubject = new BehaviorSubject<HuespedResponse[]>([]);
   huesped$ = this.huespedSubject.asObservable();

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap, catchError, throwError } from 'rxjs';
 import { User, UserLogin } from './user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class UsersService {
   private _http=inject(HttpClient);
   
 
-  private userUrl= 'http://localhost:8080/users';
+  private userUrl= `${environment.apiUrl}/users`;
 
   loadUsers(){
     this._http.get<User[]>(this.userUrl).subscribe((users)=>{
@@ -56,13 +57,28 @@ export class UsersService {
   }
 
   login(username: string, password: string): Observable<UserLogin> {
-  const loginData = { username, password };
+  // Temporal: enviar `name` (campo real en el modelo) para evitar el error SQL
+  // También enviamos `correo` por compatibilidad con otros endpoints.
+  const loginData: any = { name: username, password, correo: username };
 
-  return this._http.post<UserLogin>('http://localhost:8080/auth/login', loginData).pipe(
+  return this._http.post<UserLogin>(`${environment.apiUrl}/auth/login`, loginData).pipe(
     tap(response => {
       localStorage.setItem('token', response.token);
-      localStorage.setItem('idUser', response.idUser); 
-      localStorage.setItem('rol',response.rol); 
+      localStorage.setItem('idUser', response.idUser);
+      localStorage.setItem('rol', response.rol);
+    }),
+    // Mejor logging para errores: exponemos status y body en la consola para debugging
+    // El componente que llama puede manejar el error y mostrar mensajes al usuario.
+    // Re-lanzamos el error para que el subscriber lo reciba.
+    // Nota: no transformamos la estructura de error.
+    catchError((err) => {
+      console.error('[UsersService] login error:', {
+        url: `${environment.apiUrl}/auth/login`,
+        payload: loginData,
+        status: err?.status,
+        error: err?.error || err
+      });
+      return throwError(() => err);
     })
   );
 }

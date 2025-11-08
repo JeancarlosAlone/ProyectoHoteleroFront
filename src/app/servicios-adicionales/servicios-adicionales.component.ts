@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; // Importar HttpClient
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 interface Servicio {
   id: number;
@@ -55,7 +56,7 @@ export class ServiciosAdicionalesComponent implements OnInit {
       const formData = new FormData();
       formData.append('imagen', file, file.name);
 
-      this.http.post<{ imageUrl: string }>('http://localhost:8080/api/upload', formData).subscribe(response => {
+      this.http.post<{ imageUrl: string }>(`${environment.apiUrl}/api/upload`, formData).subscribe(response => {
         // Actualizamos la URL de la imagen en el servicio
         this.servicioSeleccionado.imagen = response.imageUrl;
       });

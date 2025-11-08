@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 declare global {
   interface Window { paypal: any; }
@@ -59,9 +60,9 @@ totalUsd: number = 0;
         return;
       }
 
-      // 🔹 Obtener todos los huéspedes pendientes
-      const url = `http://localhost:8080/api/huespedes/pendientes`;
-      const res = await fetch(url);
+  // 🔹 Obtener todos los huéspedes pendientes
+  const url = `${environment.apiUrl}/api/huespedes/pendientes`;
+  const res = await fetch(url);
       const data = await res.json();
 
       if (!data || data.length === 0) {
@@ -190,7 +191,7 @@ totalUsd: number = 0;
   }
 
   // 🔹 Enviamos el total en dólares y especificamos la moneda
-  const res = await fetch('http://localhost:8080/api/pagos/crear-orden', {
+  const res = await fetch(`${environment.apiUrl}/api/pagos/crear-orden`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -208,7 +209,7 @@ totalUsd: number = 0;
         try {
           this.mensaje = 'Procesando pago...';
 
-          const cap = await fetch('http://localhost:8080/api/pagos/capturar-orden', {
+          const cap = await fetch(`${environment.apiUrl}/api/pagos/capturar-orden`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -221,7 +222,7 @@ totalUsd: number = 0;
           if (!capJson) throw new Error('No se pudo capturar la orden');
 
           // Generar factura
-          const fac = await fetch('http://localhost:8080/api/facturas/generar', {
+          const fac = await fetch(`${environment.apiUrl}/api/facturas/generar`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -247,14 +248,14 @@ totalUsd: number = 0;
 
           setTimeout(() => {
             this.ngZone.run(() => {
-              window.location.href = 'http://localhost:4200/SACH/habitaciones';
+              window.location.href = '/SACH/habitaciones';
             });
           }, 3500);
         } catch (err) {
           console.error(err);
           this.mensaje = 'Error en PayPal';
           this.ngZone.run(() => {
-            window.location.href = 'http://localhost:4200/SACH/habitaciones';
+            window.location.href = '/SACH/habitaciones';
           });
         }
       },

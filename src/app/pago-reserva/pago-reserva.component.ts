@@ -6,6 +6,7 @@ import { ReservaService } from '../services/reserva.service';
 import { HuespedService } from '../Huesped/huesped.service';
 import { RoomsService } from '../Habitaciones/rooms.service';
 import { TypesRoomsStatus } from '../Habitaciones/rooms.model';
+import { environment } from '../../environments/environment';
 
 declare global {
   interface Window { paypal: any; }
@@ -178,7 +179,7 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
           return Promise.reject('Monto inválido');
         }
 
-        const res = await fetch('http://localhost:8080/api/pagos/crear-orden', {
+  const res = await fetch(`${environment.apiUrl}/api/pagos/crear-orden`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({ total: Number(this.calcularTotalGeneralUSD()), currency: 'USD' })
@@ -192,7 +193,7 @@ body: JSON.stringify({ total: Number(this.calcularTotalGeneralUSD()), currency: 
         try {
           this.mensaje = 'Procesando pago...';
 
-          const cap = await fetch('http://localhost:8080/api/pagos/capturar-orden', {
+          const cap = await fetch(`${environment.apiUrl}/api/pagos/capturar-orden`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ orderId: data.orderID })
@@ -202,7 +203,7 @@ body: JSON.stringify({ total: Number(this.calcularTotalGeneralUSD()), currency: 
 
           // Generar factura
           try {
-            const fac = await fetch('http://localhost:8080/api/facturas/generar', {
+            const fac = await fetch(`${environment.apiUrl}/api/facturas/generar`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

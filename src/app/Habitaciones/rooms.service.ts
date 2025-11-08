@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Room, TypesRoomsStatus } from './rooms.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class RoomsService {
   rooms$ = this.roomsSubject.asObservable();
 
   //  URL base (ajustada correctamente)
-  private baseUrl = 'http://localhost:8080/api/rooms';
+  private baseUrl = `${environment.apiUrl}/api/rooms`;
   private _http = inject(HttpClient);
 
   constructor(private http: HttpClient) {}
@@ -83,7 +84,7 @@ updateRoom(id_rooms: number, room: Room): Observable<Room> {
   }
 
   verificarHistoricoReservas(idHabitacion: number) {
-  return this.http.get<boolean>(`http://localhost:8080/api/habitaciones/${idHabitacion}/historial`);
+  return this.http.get<boolean>(`${environment.apiUrl}/api/habitaciones/${idHabitacion}/historial`);
 }
 
 }
