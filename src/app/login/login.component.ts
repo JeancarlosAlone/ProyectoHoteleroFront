@@ -60,7 +60,7 @@ export class LoginComponent {
 
   private tryClientLogin(): void {
   this.http.post(`${environment.apiUrl}/api/clientes/login`, {
-      correo: this.username,
+      correo: this.username,  // Se está enviando el correo o nombre
       password: this.password
     }).subscribe({
       next: (res: any) => {
@@ -80,7 +80,8 @@ export class LoginComponent {
         }
       }
     });
-  }
+}
+
 
   openRegisterModal() {
     this.showRegisterModal = true;
