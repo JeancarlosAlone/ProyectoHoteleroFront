@@ -183,7 +183,7 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
   const res = await fetch(`${environment.apiUrl}/api/pagos/crear-orden`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ total: this.calcularTotalGeneralUSD(), currency: 'USD' })
+    body: JSON.stringify({ total: this.calcularTotalGeneralUSD(), currency: 'USD' }) 
   });
 
   const data = await res.json();
@@ -198,36 +198,52 @@ export class PagoReservaComponent implements OnInit, AfterViewInit {
   }
 },
 
-    onApprove: async (data: any) => {
-      try {
-        this.mensaje = 'Procesando pago...';
+onApprove: async (data: any) => {
+  try {
+    this.mensaje = 'Procesando pago...';
 
-        const cap = await fetch(`${environment.apiUrl}/api/pagos/capturar-orden`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId: data.orderID })  // Utiliza el orderID recibido
-        });
-        const capJson = await cap.json();
+    // 🔹 Captura del pago
+    const cap = await fetch(`${environment.apiUrl}/api/pagos/capturar-orden`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orderId: data.orderID,
+        idHuesped: this.cliente?.idHuesped || localStorage.getItem('idHuesped')  // Usamos idHuesped si está disponible
+      })
+    });
 
-        if (!capJson || capJson.status !== 'success') {
-          throw new Error('Error al capturar la orden');
-        }
+    const capJson = await cap.json();
 
-        // Redirigir dependiendo del tipo de usuario
-        const userRole = localStorage.getItem('role'); // Obtener el rol del usuario
-        if (userRole === 'client') {
-          this.navigateHard(`/reservar/${data.orderID}`);
-        } else {
-          this.navigateHard('/SACH/habitaciones');
-        }
+    if (!capJson || capJson.status !== 'success') {
+      throw new Error('Error al capturar la orden');
+    }
 
-      } catch (err) {
-        console.error(err);
-        this.mensaje = 'Error en PayPal';
-        this.navigateHard('/login');  // Redirigir a login si ocurre un error
+    // ✅ Mostrar modal de éxito
+    this.mostrarModalConMensaje('✅ Pago y factura generados correctamente.');
+
+    console.log('Factura generada:', capJson.data?.facturaGenerada);
+
+    // 🔹 Llamar a registrar la reserva y redirigir
+    const esUsuario = this.isUserContext(); // Verifica si es un usuario o cliente
+    this.registrarYRedirigir(esUsuario);  // Llamada al método que registra la reserva
+    console.log('Pago registrado:', capJson.data?.nuevoPago);
+
+    // 🔹 Redirección después de confirmar pago
+    setTimeout(() => {
+      const userRole = localStorage.getItem('role');
+      if (userRole === 'client') {
+        this.navigateHard(`/reservar/${data.orderID}`);
+      } else {
+        this.navigateHard('/SACH/habitaciones');
       }
-    },
+    }, 2500);
 
+  } catch (err) {
+    console.error('❌ Error en proceso de pago:', err);
+    this.mensaje = 'Error en PayPal';
+    this.navigateHard('/login');
+  }
+},
     onError: (err: any) => {
       console.error(err);
       this.mensaje = 'Error en PayPal';
