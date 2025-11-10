@@ -60,28 +60,31 @@ export class LoginComponent {
 
 private tryClientLogin(): void {
   this.http.post(`${environment.apiUrl}/api/clientes/login`, {
-    correo: this.username,  // Se está enviando el correo o nombre
-    password: this.password
-  }).subscribe({
-    next: (res: any) => {
-      localStorage.setItem('cliente', JSON.stringify(res.cliente));
-      localStorage.setItem('token', res.token);  // Asegúrate de guardar el token también para el cliente
-      this.router.navigate(['/reservar']);
-    },
-    error: (err) => {
-      console.error('[LoginComponent] clientes login error:', err?.status, err?.error || err);
-      if (err.status === 0) {
-        this.loginErrorMessage = 'No se logró establecer conexión con el servidor.';
-      } else if (err.status === 404) {
-        this.loginErrorMessage = 'Ruta de login de cliente no encontrada en el backend (404).';
-      } else if (err.status === 500) {
-        this.loginErrorMessage = 'Error interno en el servidor al intentar autenticar (500). Revisa logs del backend.';
-      } else {
-        this.loginErrorMessage = 'Credenciales incorrectas o usuario no encontrado. Valide que su nombre y contraseña sean correctos.';
+      correo: this.username,
+      password: this.password
+    }).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('cliente', JSON.stringify(res.cliente));
+        localStorage.setItem('token', res.token);
+        this.router.navigate(['/reservar']);
+      },
+      error: (err) => {
+        console.error('[LoginComponent] clientes login error:', err?.status, err?.error || err);
+        if (err.status === 0) {
+          this.loginErrorMessage = 'No se logró establecer conexión con el servidor.';
+        } else if (err.status === 404) {
+          this.loginErrorMessage = 'Cliente no encontrado.';
+        } else if (err.status === 401) {
+          this.loginErrorMessage = 'Contraseña incorrecta.';
+        } else if (err.status === 500) {
+          this.loginErrorMessage = 'Error interno en el servidor.';
+        } else {
+          this.loginErrorMessage = 'Error desconocido.';
+        }
       }
-    }
-  });
+    });
 }
+
 
 
   openRegisterModal() {
